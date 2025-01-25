@@ -1,14 +1,39 @@
-import { useState } from 'react'
+import {createBrowserRouter, Outlet, RouterProvider} from 'react-router-dom'
+import Home from './pages/Home'
+import Menu from './pages/Menu'
+import Reservation from './pages/Reservation'
+import MyOrder from './pages/MyOder/'
+import Header from './components/header/Header'
+import Footer from './components/footer/Footer'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Home />
+    },
+    {
+      path: '/menu',
+      element: <Menu />
+    },
+    {
+      path: '/reservation',
+      element: <Reservation />
+    },
+    {
+      path: '/my-orders',
+      element: <MyOrder />
+    }
+  ])
 
   return (
-    <>
-      <div>
-        <h1>Testing...</h1>
-      </div>
-    </>
+    <div>
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
+    </div>
   )
 }
 
