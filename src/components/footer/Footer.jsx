@@ -8,7 +8,7 @@ export default function Footer(props) {
     return (
         <footer className='bg-secondary pt-10 pb-5 text-white'>
             <Container>
-                <div className='flex justify-between items-start flex-wrap gap-8 px-4'>
+                <div className='flex justify-between items-start flex-wrap gap-8'>
                     <div className='flex items-center flex-col font-semibold gap-2'>
                         <img 
                             className='bg-gray-400 rounded max-w-28' 

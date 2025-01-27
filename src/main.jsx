@@ -15,6 +15,10 @@ import MyOrder from './pages/MyOder/'
       element: <App />,
       children: [
         {
+          path: '/',
+          element: <Home />
+        },
+        {
           path: '/menu',
           element: <Menu />
         },

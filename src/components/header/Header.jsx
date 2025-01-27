@@ -2,11 +2,12 @@ import React, {useState} from 'react'
 import logo from '../../assets/images/logo.png'
 import Container from '../Container'
 import Button from '../Button'
-import { Form } from 'react-router-dom'
 import {NavLink} from 'react-router-dom'
+import { Outlet } from 'react-router-dom'
 
 export default function Header() {
     const [isMobileMenuOpen, SetisMobileMenuOpen] = useState(false);
+
     const navItem = [
         { title: 'Home', link: '/' },
         { title: 'Menu',  link: '/menu' },
@@ -14,19 +15,23 @@ export default function Header() {
         { title: 'My orders', link: '/my-orders' },
     ]
     return (
-        <header className=' h-16 shadow-md bg-white'>
+        <>
+        <header 
+            className='h-16 shadow-md bg-white fixed w-full top-0 right-0 left-0 z-10'
+        >
             <Container >
-                <div className='flex justify-between items-center'>
+                <div className='flex justify-between items-center transition-all duration-1000 ease-in-out'>
                     <div>
                         <img width={70} src={logo} alt="byte&bite" />
                     </div>
 
-                {/* header for laptop and desktop (large screen) */}
+                    {/* header for laptop and desktop (large screen) */}
                     <div className='hidden md:block'>
-                        <ul className='text-secondary flex items-center justify-between gap-6 font-semibold'>
+                        <ul className='flex items-center justify-between gap-6 font-semibold'>
                             {navItem.map((nav) => (
-                                    <li key={nav.title}>
-                                        <NavLink to={nav.link} className={({isActive}) => isActive ? 'text-primary' : 'text-secondary'} >
+                                    <li key={nav.title} className=''>
+                                        <NavLink to={nav.link} 
+                                        className={({isActive}) => isActive ? 'text-primary hover:underline hover:underline-offset-4' : 'text-secondary hover:underline hover:underline-offset-4 transition-all duration-300 delay-150 ease-in-out'} >
                                             {nav.title}
                                         </NavLink>
                                     </li>
@@ -48,7 +53,9 @@ export default function Header() {
 
                     {/* mobile menu */}
                         {isMobileMenuOpen && (
-                            <div className='md:hidden absolute right-0 top-16 bg-white w-full py-4 px-6 transition-all duration-1000 ease-in-out rounded-br-2xl rounded-bl-2xl'>
+                            <div className='border border-secondary md:hidden absolute right-0 top-16 bg-white w-full py-4 px-6 rounded-br-2xl rounded-bl-2xl
+                                transition-all duration-300 ease-in-out
+                            '>
                                 <ul className='text-secondary flex items-start justify-between gap-2 font-semibold flex-col'>
                                     {navItem.map((nav) => ( 
                                             <li key={nav.title}>
@@ -64,5 +71,6 @@ export default function Header() {
                 </div>
             </Container>
         </header>
+        </>
     )
 }

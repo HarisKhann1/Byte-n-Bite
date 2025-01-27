@@ -1,13 +1,14 @@
 import React from 'react'
 import Header from '../components/header/Header'
+import HeroSection from '../components/HeroSection'
+import Container from '../components/Container'
+
 
 export default function Home(props) {
     
-
     return (
-        <>
-            <Header />
-            <h1>I am home</h1>
-        </>
+        <main>
+            <HeroSection />
+        </main>
     )
 }
