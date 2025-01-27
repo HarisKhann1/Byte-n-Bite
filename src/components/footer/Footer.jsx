@@ -8,9 +8,13 @@ export default function Footer(props) {
     return (
         <footer className='bg-secondary pt-10 pb-5 text-white'>
             <Container>
-                <div className='flex justify-between items-start'>
+                <div className='flex justify-between items-start flex-wrap gap-8 px-4'>
                     <div className='flex items-center flex-col font-semibold gap-2'>
-                        <img className='bg-gray-400 rounded' width={120} src={Logo} alt="byte&bite logo" />
+                        <img 
+                            className='bg-gray-400 rounded max-w-28' 
+                            src={Logo} 
+                            alt="byte&bite logo"
+                        />
                         <span className='text-primary'>Byte&Bite</span>
                     </div>
                     <div className='flex gap-2 flex-col'>
@@ -29,8 +33,8 @@ export default function Footer(props) {
                         </div>
                     </div>
                 </div>
-                    <p className='text-primary text-start'>© 2025 ByteNbite. All Rights Reserved.</p>
-                </Container>
+                    <p className='text-primary md:text-start mt-6 text-center'>© 2025 ByteNbite. All Rights Reserved.</p>
+            </Container>
         </footer>
     )
 }
