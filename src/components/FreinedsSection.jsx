@@ -6,7 +6,7 @@ export default function FreinedsSection(props) {
 
     return (
         <section>
-                <div className='py-12 flex flex-col gap-6'>
+                <div className='pt-12 flex flex-col gap-6'>
                     <Container>
                         <h2 className='text-xl font-medium md:font-semibold md:text-3xl lg:text-4xl'>Take your friends out to lunch</h2>
                     </Container>

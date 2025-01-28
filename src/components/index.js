@@ -5,6 +5,7 @@ import Container from "./Container.jsx";
 import HeroSection from "./HeroSection";
 import WeekMenu from "./WeekMenu.jsx";
 import FreinedsSection from "./FreinedsSection.jsx";
+import FAQs from "./FAQs.jsx";
 
 export { 
     Button,
@@ -13,5 +14,6 @@ export {
     Container, 
     HeroSection,
     WeekMenu,
-    FreinedsSection
+    FreinedsSection,
+    FAQs
 };
