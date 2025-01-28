@@ -10,7 +10,7 @@ export default function Button({
 
     return (
         <>
-           <button type={type} className={ `bg-amber-500 px-4 py-2 rounded-md ${className}` } {...props}>
+           <button type={type} className={`bg-primary px-4 py-2 rounded-md ${className}` } {...props}>
                 {children}
            </button>
         </>

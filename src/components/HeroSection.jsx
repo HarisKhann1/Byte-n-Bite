@@ -7,7 +7,7 @@ import {Link} from 'react-router-dom'
 export default function HeroSection(props) {
 
     return (
-        <section className='py-28'>
+        <section className='pt-28 pb-5'>
             <Container>
                 <div className='relative rounded-xl overflow-hidden'>
                     {/* Overlay to make text readable */}
@@ -22,8 +22,8 @@ export default function HeroSection(props) {
                         <h1 className='text-primary font-bold text-4xl md:text-5xl'>Byte&Bite</h1>
                         <p className='text-sm md:text-md'>The best place for delicious meals and unforgettable moments.</p>
                         <Link to="/reservation">
-                            <Button type='button' className='bg-primary text-sm md:max-w-36 text-center cursor-pointer'>
-                                Reserve Now
+                            <Button type='button' className='bg-primary text-black text-sm font-medium md:max-w-36 text-center cursor-pointer hover:bg-amber-500  transition-transform duration-300 transform hover:scale-110'>
+                                Reserve a table
                             </Button>
                         </Link>
                     </div>

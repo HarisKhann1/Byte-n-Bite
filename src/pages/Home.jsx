@@ -1,7 +1,5 @@
 import React from 'react'
-import Header from '../components/header/Header'
-import HeroSection from '../components/HeroSection'
-import Container from '../components/Container'
+import { HeroSection, WeekMenu } from '../components/index'
 
 
 export default function Home(props) {
@@ -9,6 +7,7 @@ export default function Home(props) {
     return (
         <main>
             <HeroSection />
+            <WeekMenu />
         </main>
     )
 }
