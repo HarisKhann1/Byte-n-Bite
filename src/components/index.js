@@ -4,6 +4,7 @@ import Footer from "./footer/Footer.jsx"
 import Container from "./Container.jsx";
 import HeroSection from "./HeroSection";
 import WeekMenu from "./WeekMenu.jsx";
+import FreinedsSection from "./FreinedsSection.jsx";
 
 export { 
     Button,
@@ -11,5 +12,6 @@ export {
     Footer, 
     Container, 
     HeroSection,
-    WeekMenu
+    WeekMenu,
+    FreinedsSection
 };

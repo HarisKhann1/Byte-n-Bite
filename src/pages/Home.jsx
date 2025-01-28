@@ -1,5 +1,5 @@
 import React from 'react'
-import { HeroSection, WeekMenu } from '../components/index'
+import { HeroSection, WeekMenu, FreinedsSection } from '../components/index'
 
 
 export default function Home(props) {
@@ -8,6 +8,7 @@ export default function Home(props) {
         <main>
             <HeroSection />
             <WeekMenu />
+            <FreinedsSection />
         </main>
     )
 }
