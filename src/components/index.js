@@ -6,6 +6,9 @@ import HeroSection from "./HeroSection";
 import WeekMenu from "./WeekMenu.jsx";
 import FreinedsSection from "./FreinedsSection.jsx";
 import FAQs from "./FAQs.jsx";
+import Signup from "./Signup.jsx";
+import Input from "./Input.jsx";
+import Login from "./Login.jsx";
 
 export { 
     Button,
@@ -15,5 +18,8 @@ export {
     HeroSection,
     WeekMenu,
     FreinedsSection,
-    FAQs
+    FAQs,
+    Signup,
+    Input,
+    Login
 };

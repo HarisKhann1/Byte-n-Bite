@@ -8,6 +8,7 @@ import Home from './pages/Home'
 import Menu from './pages/Menu'
 import Reservation from './pages/Reservation'
 import MyOrder from './pages/MyOder/'
+import { Login, Signup } from './components/index.js'
 
   const router = createBrowserRouter([
     {
@@ -29,6 +30,14 @@ import MyOrder from './pages/MyOder/'
         {
           path: '/my-orders',
           element: <MyOrder />
+        },
+        {
+          path: '/login',
+          element: <Login />
+        },
+        {
+          path: '/signup',
+          element: <Signup />
         }
       ]
     }

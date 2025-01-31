@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import logo from '../../assets/images/logo.png'
 import Container from '../Container'
 import Button from '../Button'
-import {NavLink} from 'react-router-dom'
+import {Link, NavLink} from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
 
 export default function Header() {
@@ -29,7 +29,7 @@ export default function Header() {
                     <div className='hidden md:block'>
                         <ul className='flex items-center justify-between gap-6 font-semibold'>
                             {navItem.map((nav) => (
-                                    <li key={nav.title} className=''>
+                                    <li key={nav.title}>
                                         <NavLink to={nav.link} 
                                         className={({isActive}) => isActive ? 'text-primary hover:underline hover:underline-offset-4' : 'text-secondary hover:underline hover:underline-offset-4 transition-all duration-300 delay-150 ease-in-out'} >
                                             {nav.title}
@@ -37,6 +37,13 @@ export default function Header() {
                                     </li>
                                 )
                             )}
+                            <li>
+                                <Link to={'/login'}>
+                                    <Button className='bg-secondary hover: hover:bg-[#3a4a43] transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
+                                        Sign in
+                                    </Button>
+                                </Link>
+                            </li>
                         </ul>
                     </div>
 
