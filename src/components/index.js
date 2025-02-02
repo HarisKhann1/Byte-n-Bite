@@ -9,6 +9,8 @@ import FAQs from "./FAQs.jsx";
 import Signup from "./Signup.jsx";
 import Input from "./Input.jsx";
 import Login from "./Login.jsx";
+import ReservationForm from "./ReservationForm.jsx";
+
 
 export { 
     Button,
@@ -21,5 +23,6 @@ export {
     FAQs,
     Signup,
     Input,
-    Login
+    Login,
+    ReservationForm
 };

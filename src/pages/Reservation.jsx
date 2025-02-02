@@ -1,11 +1,11 @@
 import React from 'react'
+import { ReservationForm } from '../components/index'
 
 export default function Reservation(props) {
     
-
     return (
-        <>
-            <h1>Reservation Page</h1>
-        </>
+        <section>
+            <ReservationForm />
+        </section>
     )
 }
