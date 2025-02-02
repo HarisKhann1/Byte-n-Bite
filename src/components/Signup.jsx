@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import Container from './Container'
 import Input from './Input'
 import { useEffect, useRef } from 'react';
@@ -7,27 +7,42 @@ import Button from './Button';
 import { Link } from 'react-router-dom';
 import showPasswordImage from '../assets/images/show-password-48.png'
 import hidePasswordImage from '../assets/images/blind-40.png'
+import { set, useForm } from 'react-hook-form';
 
 
 export default function Signup(props) {
-    const ref = useRef();
-    const passRef = useRef();
-    const pass2Ref = useRef();
-    const [isPasswordHidden, setisPasswordHidden] = React.useState(true)
+    const [isPasswordsMatch, setisPasswordsMatch] = useState(true)
+    const [isPasswordHidden, setisPasswordHidden] = useState(true)
+    const [isPassword2Focused, setisPassword2Focused] = useState(false)
+    const { register, handleSubmit, watch, formState: { errors }, setFocus, setError, clearErrors } = useForm();
 
     useEffect(() => {
-        ref.current.focus(); // Focus only on the first render
-    }, []);
+        setFocus('fullname'); // Focus only on the first render
+    }, [setFocus]);
     
     useEffect(() => {
-        if (!isPasswordHidden) {
-            passRef.current.type = 'text';
-            pass2Ref.current.type = 'text';
-        } else {
-            passRef.current.type = 'password';
-            pass2Ref.current.type = 'password';
+        if (isPassword2Focused && (watch('password') !== watch('password2'))) {
+            console.log('passwords do not match');
+            setisPasswordsMatch(false)
+            return;
         }
-    }, [isPasswordHidden]);
+        
+        if (isPassword2Focused && (watch('password') === watch('password2'))) {
+            setisPasswordsMatch(true)
+        }
+    }, [watch('password'), watch('password2'), isPassword2Focused]);
+    
+    const onSubmit = (data) => {
+        if (watch('password') !== watch('password2')) {
+            return;
+        }
+        console.log('submitted');
+        console.log(data);
+    }
+
+    const redBorderONError = (inputBox) => {
+         return inputBox ? 'border-2 border-red-500' : ''
+    }
     
     return (
         <section className='pt-25 pb-10 flex flex-col items-center'>
@@ -38,11 +53,83 @@ export default function Signup(props) {
                         </div>  
                         <div className='flex flex-col gap-2 items-center'>
                             <h2 className='mb-6 text-2xl font-bold text-center underline underline-offset-8 decoration-1 decoration-secondary'>Signup</h2>
-                            <form className='flex flex-col gap-4'>
-                                <Input  label='Full Name' type='text' className='min-w-64 md:min-w-72' placeholder='Enter your full name' ref={ref}/>
-                                <Input  label='Email' type='text' className='min-w-64 md:min-w-72' placeholder='Enter your email'/>
+                            
+                            <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+                                <Input  
+                                    { ...register("fullname",
+                                        {
+                                            required: "Full name is required.",
+                                            minLength: {
+                                                value: 3,
+                                                message: "Full name must be at least 3 characters long."
+                                            }
+                                        }
+                                    )}
+                                    label='Full Name' 
+                                    type='text' 
+                                    className={`min-w-64 md:min-w-72 ${redBorderONError(errors.fullname)}`} placeholder='Enter your full name' 
+                                />
+                                {errors.fullname && <p className="text-red-500 text-sm -mt-4">{errors.fullname.message}</p>}
+                                
+                                <Input
+                                    { ...register("email",
+                                        {
+                                            required: "Email is required.",
+                                            pattern: {
+                                                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                                                message: "Invalid email address."
+                                            }
+                                        }
+                                    )}  
+                                    label='Email' 
+                                    type='text' 
+                                    className={`min-w-64 md:min-w-72 ${redBorderONError(errors.email)}`} 
+                                    placeholder='Enter your email'
+                                />
+                                {errors.email && <p className="text-red-500 text-sm -mt-4">{errors.email.message}</p>}
+                                
                                 <div className='min-w-64 md:min-w-72 flex flex-row items-center'>
-                                    <Input ref={passRef}  label='Enter your password' type='password' className='min-w-64 md:min-w-72 pr-14' placeholder='Confirm your password'/>
+                                    <Input
+                                        { ...register("password",
+                                            { 
+                                                required: "Password is required.",
+                                                minLength: {
+                                                    value: 8,
+                                                    message: "Password must be at least 8 characters long."
+                                                }
+                                            }
+                                        )} 
+                                        label='Enter your password' 
+                                        type={isPasswordHidden ? 'password' : 'text'} 
+                                        className={`min-w-64 md:min-w-72 pr-14 ${redBorderONError(errors.password)}`} 
+                                        placeholder='Confirm your password'
+                                    />
+                                    <img  
+                                        onClick={() => setisPasswordHidden(!isPasswordHidden)}
+                                        className='w-6 h-6 cursor-pointer -translate-x-8 translate-y-4'
+                                        src={isPasswordHidden ? hidePasswordImage : showPasswordImage} 
+                                        alt="password hidden" 
+                                    />
+                                </div>
+                                {errors.password && <p className="text-red-500 text-sm -mt-4">{errors.password.message}</p>}
+                                
+                                <div className='min-w-64 md:min-w-72 flex flex-row items-center'>
+                                    <Input 
+                                        { ...register("password2",
+                                            { 
+                                                required: "Password is required.",
+                                                minLength: {
+                                                    value: 8,
+                                                    message: "Password must be at least 8 characters long."
+                                                }
+                                            }
+                                        )} 
+                                        label='Confirm your password' 
+                                        type={isPasswordHidden ? 'password' : 'text'} 
+                                        className={`min-w-64 md:min-w-72 pr-14 ${redBorderONError(errors.password2)}`} 
+                                        placeholder='Confirm your password'
+                                        onClick={() => setisPassword2Focused(true)}
+                                    />
                                     <img  
                                         className='w-6 h-6 cursor-pointer -translate-x-8 translate-y-4'
                                          onClick={() => setisPasswordHidden(!isPasswordHidden)}
@@ -50,32 +137,27 @@ export default function Signup(props) {
                                         alt="password hidden" 
                                     />
                                 </div>
-                                <div className='min-w-64 md:min-w-72 flex flex-row items-center'>
-                                    <Input ref={pass2Ref}  label='Confirm your password' type='password' className='min-w-64 md:min-w-72 pr-14' placeholder='Confirm your password'/>
-                                    <img  
-                                        className='w-6 h-6 cursor-pointer -translate-x-8 translate-y-4'
-                                         onClick={() => setisPasswordHidden(!isPasswordHidden)}
-                                        src={isPasswordHidden ? hidePasswordImage : showPasswordImage} 
-                                        alt="password hidden" 
-                                    />
-                                </div>
-
+                                {errors.password2 && <p className="text-red-500 text-sm -mt-4">{errors.password2.message}</p>}
+                                {!isPasswordsMatch && <p className="text-red-500 text-sm -mt-4">Passwords do not match.</p>}
                                 <div>
                                     <Button type='submit' className='min-w-64 md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out'>
                                         Login
                                     </Button>
                                 </div>
                             </form>
+                                                       
+                            <p className='text-center text-sm'>Already have an account? 
                                 <Link to='/login'>
-                                    <p className='text-center text-sm'>Already have an account? <span className='font-medium'>Login</span></p>
+                                    <span className='font-medium ml-1 hover:text-secondary'>Login</span>
                                 </Link>
+                            </p>
                         </div>
                     </div>
                     <div className='hidden md:block max-w-[55%]'>
                         <img 
                             className='w-[36rem] h-[36rem] object-cover rounded-2xl'
                             src={sigupImage} 
-                            alt="" 
+                            alt="sigup illustration" 
                         />
                     </div>
                 </div>

@@ -7,23 +7,26 @@ import Button from './Button';
 import { Link } from 'react-router-dom';
 import showPasswordImage from '../assets/images/show-password-48.png'
 import hidePasswordImage from '../assets/images/blind-40.png'
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner'
 
 export default function Login(props) {
-    const ref = useRef();
-    const passRef = useRef();
     const [isPasswordHidden, setisPasswordHidden] = React.useState(true)
+    const { register, handleSubmit, formState: { errors }, setFocus } = useForm();
+    
+    const onSubmit = (data) => {
+        toast.success('Login successful');
+        console.log('submitted');
+        console.log(data);
+    }
 
     useEffect(() => {
-        ref.current.focus(); // Focus only on the first render
-    }, []);
+        setFocus('email') // Focus only on the first render
+    }, [setFocus]);
     
-    useEffect(() => {
-        if (!isPasswordHidden) {
-            passRef.current.type = 'text';
-        } else {
-            passRef.current.type = 'password';
-        }
-    }, [isPasswordHidden]);
+    const redBorderONError = (inputBox) => {
+        return inputBox ? 'border-2 border-red-500' : ''
+    }
 
     return (
         <section className='pt-25 pb-10 flex flex-col items-center'>
@@ -33,34 +36,71 @@ export default function Login(props) {
                             <h2 className='border-2 border-secondary py-1 font-medium px-4 rounded-2xl'>Byte&Bite</h2>
                         </div>  
                         <div className='flex flex-col gap-2 items-center'>
-                            <h2 className='mb-6 text-2xl font-bold text-center underline underline-offset-8 decoration-1 decoration-secondary'>Signup</h2>
-                            <form className='flex flex-col gap-4'>
-                                <Input  label='Full Name' type='text' className='min-w-64 md:min-w-72' placeholder='Enter your full name' ref={ref}/>
+                            <h2 className='mb-6 text-2xl font-bold text-center underline underline-offset-8 decoration-1 decoration-secondary'>Login</h2>
+                            <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-4'>
+                                <Input  
+                                    {...register("email", 
+                                        {
+                                            required: "Email is required.",
+                                            pattern: {
+                                                value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                                                message: "Invalid email address."
+                                            }
+                                        }
+                                    )}
+                                    label='Email' 
+                                    type='text' 
+                                    className={`min-w-64 md:min-w-72 ${redBorderONError(errors.email)}`} 
+                                    placeholder='Enter your email' 
+                                />
+                                {errors.email && <p className="text-red-500 text-sm -mt-4">{errors.email.message}</p>}    
                                 <div className='min-w-64 md:min-w-72 flex flex-row items-center'>
-                                    <Input ref={passRef}  label='Enter your password' type='password' className='min-w-64 md:min-w-72 pr-14' placeholder='Confirm your password'/>
+                                    <Input 
+                                        {
+                                            ...register("password",
+                                                { 
+                                                    required: "Password is required.",
+                                                    minLength: {
+                                                        value: 8,
+                                                        message: "Password must be at least 8 characters long."
+                                                    }
+                                                }
+                                            )
+                                        }
+                                        label='Enter your password' 
+                                        type={isPasswordHidden ? 'password' : 'text'} 
+                                        className={`min-w-64 md:min-w-72 pr-14 ${redBorderONError(errors.password)}`} 
+                                        placeholder='Enter your password'
+                                    />
                                     <img  
                                         className='w-6 h-6 cursor-pointer -translate-x-8 translate-y-4'
                                         onClick={() => setisPasswordHidden(!isPasswordHidden)}
                                         src={isPasswordHidden ? hidePasswordImage : showPasswordImage} 
-                                        alt="password hidden" 
+                                        alt="Toggle password visibility" 
                                     />
                                 </div>
+                                {errors.password && <p className="text-red-500 text-sm -mt-4">{errors.password.message}</p>}
                                 <div>
-                                    <Button type='submit' className='min-w-64 md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out'>
-                                    Login
+                                    <Button 
+                                        type='submit'
+                                        className='min-w-64 md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out'>
+                                        Login
                                     </Button>
                                 </div>
                             </form>
+                                
+                            <p className='text-center text-sm'>Don't have an account? 
                                 <Link to='/signup'>
-                                    <p className='text-center text-sm'>Don't have an account? <span className='font-medium'>Signup</span></p>
+                                    <span className='font-medium ml-1 hover:text-secondary'>Signup</span>
                                 </Link>
+                            </p>
                         </div>
                     </div>
                     <div className='hidden md:block max-w-[55%]'>
                         <img 
                             className='w-[36rem] h-[26rem] object-cover rounded-2xl'
                             src={sigupImage}  
-                            alt="" 
+                             alt="Signup illustration"
                         />
                     </div>
                 </div>

@@ -40,7 +40,7 @@ export default function Header() {
                             <li>
                                 <Link to={'/login'}>
                                     <Button className='bg-secondary hover: hover:bg-[#3a4a43] transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
-                                        Sign in
+                                        Login
                                     </Button>
                                 </Link>
                             </li>
@@ -72,6 +72,13 @@ export default function Header() {
                                             </li>
                                         )
                                     )}
+                                    <li>
+                                        <Link to={'/login'}>
+                                            <Button className='bg-secondary hover: hover:bg-[#3a4a43] transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
+                                                Login
+                                            </Button>
+                                        </Link>
+                                    </li>
                                 </ul>
                             </div>
                         )}

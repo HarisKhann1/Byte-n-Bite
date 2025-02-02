@@ -41,7 +41,7 @@ export default function FAQs(props) {
     return (
        <section className='-mt-6 py-20 bg-[#ebf1f4]'>
             <Container>
-                <div className='flex flex-col gap-6'>
+                <div className='flex flex-col gap-6 pb-3'>
                     <h2 className='text-xl font-medium md:font-semibold md:text-3xl lg:text-4xl'>Frequently Asked Questions</h2>
                     <div className='flex flex-col gap-4'>
                         {
