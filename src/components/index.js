@@ -10,8 +10,12 @@ import Signup from "./Signup.jsx";
 import Input from "./Input.jsx";
 import Login from "./Login.jsx";
 import ReservationForm from "./ReservationForm.jsx";
-
-
+import Loader from "./loader.jsx";
+// Dashboard components
+import Sidebar from "./dashboard/Sidebar.jsx";
+import DashboardHeader from "./dashboard/DashboardHeader.jsx";
+import AddDishes from "./dashboard/AddDishes.jsx";
+import Table from "./dashboard/Table.jsx";
 export { 
     Button,
     Header, 
@@ -24,5 +28,10 @@ export {
     Signup,
     Input,
     Login,
-    ReservationForm
+    ReservationForm,
+    Loader,
+    Sidebar,
+    DashboardHeader,
+    AddDishes,
+    Table
 };

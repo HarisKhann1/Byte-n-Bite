@@ -60,7 +60,7 @@ export default function FAQs(props) {
                                         </button>
                                     </div>
                                     <div className={`transition-all duration-300 ease-in-out ${openId === faq.id ? 'max-h-40' : 'max-h-0'}`}>
-                                        <p className={`${openId === faq.id ? 'block' : 'hidden'} text-gray-500 text-sm sm:text-[16px]`} mt-2>{ faq.answer }</p>
+                                        <p className={`${openId === faq.id ? 'block' : 'hidden'} text-gray-500 text-sm sm:text-[16px] mt-2`}>{ faq.answer }</p>
                                     </div>
                                 </div>
                             ))

@@ -8,9 +8,10 @@ import { Link } from 'react-router-dom';
 import showPasswordImage from '../assets/images/show-password-48.png'
 import hidePasswordImage from '../assets/images/blind-40.png'
 import { set, useForm } from 'react-hook-form';
-
+import authService from '../appwrite/auth';
 
 export default function Signup(props) {
+    const [creatingAccount, setCreatingAccount] = useState(false);
     const [isPasswordsMatch, setisPasswordsMatch] = useState(true)
     const [isPasswordHidden, setisPasswordHidden] = useState(true)
     const [isPassword2Focused, setisPassword2Focused] = useState(false)
@@ -32,12 +33,25 @@ export default function Signup(props) {
         }
     }, [watch('password'), watch('password2'), isPassword2Focused]);
     
-    const onSubmit = (data) => {
+    const onSubmit = async(data) => {
         if (watch('password') !== watch('password2')) {
             return;
         }
-        console.log('submitted');
-        console.log(data);
+
+        try {
+            setCreatingAccount(true);
+            const userData = await authService.createAccount(data.email, data.password, data.fullname);
+            setCreatingAccount(false);
+            
+            if (userData) {
+                
+                console.log('submitted');
+                console.log(data);
+            }
+        } catch (error) {
+            console.log('Signup :: Error creating account: ', error);
+        }
+        
     }
 
     const redBorderONError = (inputBox) => {
@@ -140,8 +154,11 @@ export default function Signup(props) {
                                 {errors.password2 && <p className="text-red-500 text-sm -mt-4">{errors.password2.message}</p>}
                                 {!isPasswordsMatch && <p className="text-red-500 text-sm -mt-4">Passwords do not match.</p>}
                                 <div>
-                                    <Button type='submit' className='min-w-64 md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out'>
-                                        Login
+                                    <Button 
+                                        disabled={creatingAccount} 
+                                        type="submit" 
+                                        className={`min-w-64 md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out ${creatingAccount ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                        {creatingAccount ? 'Creating Account...' : 'Login'}
                                     </Button>
                                 </div>
                             </form>

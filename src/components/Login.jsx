@@ -98,6 +98,7 @@ export default function Login(props) {
                     </div>
                     <div className='hidden md:block max-w-[55%]'>
                         <img 
+                            loading='lazy'
                             className='w-[36rem] h-[26rem] object-cover rounded-2xl'
                             src={sigupImage}  
                              alt="Signup illustration"
