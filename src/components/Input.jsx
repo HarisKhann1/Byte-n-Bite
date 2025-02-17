@@ -5,7 +5,7 @@ function Input(
     label,
     type = 'text',
     className = '',
-    placeholder = 'Enter your text here',
+    placeholder = '',
     ...props
 }, 
     ref

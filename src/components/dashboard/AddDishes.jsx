@@ -5,6 +5,8 @@ import Table from './Table'
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { DashboardHeader } from '..'
+import dish from '../../appwrite/addDish'
+import { toast } from 'sonner'
 
 export default function AddDishes(props) {
     const { register, handleSubmit, formState: { errors }, setFocus, setValue } = useForm()
@@ -13,11 +15,15 @@ export default function AddDishes(props) {
         setFocus('name')
     },[])
 
-    const onSubmit = (data) => {}
-    
-    const handleChange = (e) => {
-        console.log(e.target.value)
-        setValue('category', e.target.value)
+    const onSubmit = async (data) => {
+        
+        try {
+            const response = await dish.addDish(data);
+            toast.success('Dish added successfully');
+        } catch (error) {
+            toast.error('Failed to add dish');
+        }
+        
     }
 
     return (
@@ -51,12 +57,9 @@ export default function AddDishes(props) {
                             {...register('category', { required: "Select a category" })}
                             name="category" 
                             id="category" 
-                            onChange={handleChange}
                             className='sm:w-lg md:w-52 text-secondary py-2 px-4 rounded border focus:border-2 focus:border-secondary transition duration-300 ease-in-out'
                         >
-                            <option disabled>Select a category</option>
-                            <option value="testing1"/>
-                            <option value="haleem">Haleem</option>
+                            <option>Select a category</option>                            
                         </select>
                         {errors.category && <span className='text-red-500'>{errors.category.message}</span>}
                     </div>
@@ -76,7 +79,7 @@ export default function AddDishes(props) {
                         <label className='font-medium text-lg text-secondary' htmlFor="description">Description:</label>
                         <textarea 
                             {...register('description', { required: "Enter description" })}
-                            name="" 
+                            name="description" 
                             id="description" 
                             className='w-[12.4rem] sm:w-lg md:w-2xl outline-none rounded border focus:border-2 focus:border-secondary'
                         />
@@ -92,6 +95,7 @@ export default function AddDishes(props) {
                 </Button>
             </form>
             <Table />
+            <div className='h-16'></div>
         </section>
     )
 }
