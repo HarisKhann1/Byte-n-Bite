@@ -1,4 +1,4 @@
-import { Client, Account, ID, Databases, Storage } from 'appwrite';
+import { Client, Account, ID, Databases, Storage, Query } from 'appwrite';
 import conf from '../conf/conf';
 
 class Dish {
@@ -15,13 +15,12 @@ class Dish {
         this.bucket = new Storage(this.client);
     }
 
-    async addDish({name, price, description, image, category}) {
+    async addDish({name, price, description, image, category}, imageId) {
         const imageName = image[0].name;
-        console.log("Adding dish: ", name, price, description, imageName, category);
         return await this.databases.createDocument(
             conf.appWriteDatabaseId,
             conf.appWriteDishesCollectionId,
-            ID.unique(),
+            imageId,
             {name, description, image : imageName, category, price : parseInt(price)}
         );
     }
@@ -29,9 +28,82 @@ class Dish {
     async getDishes() {
         return await this.databases.listDocuments(
             conf.appWriteDatabaseId,
-            conf.appWriteDishesCollectionId
+            conf.appWriteDishesCollectionId,
+            [
+                Query.orderDesc("$updatedAt"),
+
+            ]
         );
     }
+
+    async updateDish({name, price,category,image ,description, ID}) {
+
+        if (!image || !image[0]) {
+            return `Image is not provided`;
+        }
+
+        try {
+            return await this.databases.updateDocument(
+                conf.appWriteDatabaseId,
+                conf.appWriteDishesCollectionId,
+                ID,
+                {name, description, image : image[0].name, category, price : parseInt(price)}
+            );
+        } catch (error) {
+            return 'Failed to update dish';
+        }
+    }
+
+    async deleteDish({ID}) {
+        try {
+            return await this.databases.deleteDocument(
+                conf.appWriteDatabaseId,
+                conf.appWriteDishesCollectionId,
+                ID
+            );
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async uploadImage(image, id = null) {
+        try {
+            return await this.bucket.createFile(
+                conf.appWriteDishesBucketId,
+                id ? id : ID.unique(),
+                image,
+            )
+        } catch (error) {
+            return null;
+        }
+    }
+
+    async deleteImage(id) {
+        console.log(`appwrite Deleting image with id: ${id}`);
+        
+        try {
+            return await this.bucket.deleteFile(
+                conf.appWriteDishesBucketId,
+                id
+            );
+        } catch (error) {
+            return null;
+        }
+    }
+
+    getDishImagePreview(imageId) {
+        
+        try {
+            return this.bucket.getFilePreview(
+                conf.appWriteDishesBucketId,
+                imageId
+            );
+        } catch (error) {
+            console.log(error);
+            
+            return null;
+        }
+    };
 }
 
 const dish = new Dish();

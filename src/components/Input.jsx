@@ -18,7 +18,7 @@ function Input(
             <input
                 ref={ref}
                 className={`border-1 border-gray-500 rounded outline-none px-2 py-[0.5rem]
-                            sm:text-[1rem] sm:font-medium text-gray-700 duration-100 ease-in-out
+                            sm:text-[1rem]  text-gray-700 duration-100 ease-in-out
                              focus:border-2
                             ${className}
                          `} 

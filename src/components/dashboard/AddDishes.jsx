@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 
 export default function AddDishes(props) {
     const { register, handleSubmit, formState: { errors }, setFocus, setValue } = useForm()
+    const [isDishAdded, setIsDishAdded] = useState(false);
 
     useEffect(() => {
         setFocus('name')
@@ -18,8 +19,17 @@ export default function AddDishes(props) {
     const onSubmit = async (data) => {
         
         try {
-            const response = await dish.addDish(data);
-            toast.success('Dish added successfully');
+            const uploadDishImage = await dish.uploadImage(data.image[0]);
+            if (uploadDishImage) {
+                const response = await dish.addDish(data, uploadDishImage.$id);
+                setValue('name', '');
+                setValue('price', '');
+                setValue('category', '');
+                setValue('image', null);
+                setValue('description', '');
+                toast.success('Dish added successfully');
+                setIsDishAdded(!isDishAdded);
+            }
         } catch (error) {
             toast.error('Failed to add dish');
         }
@@ -68,8 +78,7 @@ export default function AddDishes(props) {
                     <div className='flex flex-col'>
                         <Input 
                             {...register('image', { required: "Upload an image" })}
-                            className='w-[12.4rem] sm:w-lg md:w-2xl cursor-pointer' 
-                            label='Image' 
+                            className='w-[12.4rem] sm:w-lg md:w-2xl cursor-pointer'  
                             type='file' 
                             placeholder='Upload Image' 
                         />
@@ -85,7 +94,7 @@ export default function AddDishes(props) {
                         />
                         {errors.description && <span className='text-red-500'>{errors.description.message}</span>}
                     </div>
-                    
+                
                 </div>
                 <Button 
                     type='submit'
@@ -94,7 +103,7 @@ export default function AddDishes(props) {
                     Add Dish
                 </Button>
             </form>
-            <Table />
+            <Table isDishAdded={isDishAdded}/>
             <div className='h-16'></div>
         </section>
     )
