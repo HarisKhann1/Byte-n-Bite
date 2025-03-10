@@ -38,10 +38,13 @@ class Dish {
 
     async updateDish({name, price,category,image ,description, ID}) {
 
-        if (!image || !image[0]) {
+        console.log(image.length === 0);
+        if (image.length === 0) {
+            console.log(`legnth 0`);
+        }
+        if (!image) {
             return `Image is not provided`;
         }
-
         try {
             return await this.databases.updateDocument(
                 conf.appWriteDatabaseId,
@@ -67,6 +70,9 @@ class Dish {
     }
 
     async uploadImage(image, id = null) {
+        if (!image) {
+            return null;
+        }
         try {
             return await this.bucket.createFile(
                 conf.appWriteDishesBucketId,
@@ -79,20 +85,24 @@ class Dish {
     }
 
     async deleteImage(id) {
-        console.log(`appwrite Deleting image with id: ${id}`);
+        console.log(`appwrite got`,id);
         
         try {
-            return await this.bucket.deleteFile(
-                conf.appWriteDishesBucketId,
-                id
-            );
+            if (id === null) {
+                return null;
+            }else {
+                return await this.bucket.deleteFile(
+                    conf.appWriteDishesBucketId,
+                    id
+                );
+            }
         } catch (error) {
             return null;
         }
     }
 
     getDishImagePreview(imageId) {
-        
+
         try {
             return this.bucket.getFilePreview(
                 conf.appWriteDishesBucketId,

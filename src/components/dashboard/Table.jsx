@@ -8,8 +8,8 @@ export default function Table({isDishAdded}) {
     const { register, handleSubmit, formState: { errors }, setFocus, setValue, getValues } = useForm();
     const [editableDishId, setEditableDishId] = useState(null);
     const [dishes, setDishes] = useState([]);
-    const [refresh, setRefresh] = useState(false);
-    const [toBeDeleteImageId, setToBeDeleteImageId] = useState(null);
+    const [refresh, setRefresh] = useState(false); 
+    const [isUpdating, setIsUpdating] = useState(false);
     
     // Fetching all the dishes from the database
     const fetchDishes = useCallback(async () => {
@@ -38,9 +38,11 @@ export default function Table({isDishAdded}) {
     }, [fetchDishes]);
 
     const editButton = (id) => {
-        setEditableDishId(id === editableDishId ? null : id); // Toggle edit mode for the dish
+        // Toggle edit mode for the dish
+        setEditableDishId(id === editableDishId ? null : id); 
         if (editableDishId) {
-            onSubmit(); // Save the changes when the user clicks on the Save button
+            // Save the changes when the user clicks on the Save button
+            onSubmit(); 
         }
     };
 
@@ -53,8 +55,7 @@ export default function Table({isDishAdded}) {
     }, []);
 
     const onSubmit = async (data) => {
-        // console.log('data', getValues('image_${editableDishId}'));
-        
+        setIsUpdating(true);
         // Only proceed when editableDishId is set (i.e., save action triggered)
         if (editableDishId) {
             const updatedDishName = getValues(`name_${editableDishId}`);
@@ -62,21 +63,25 @@ export default function Table({isDishAdded}) {
             const updatedDishCategory = getValues(`category_${editableDishId}`);
             const updatedDishImage = getValues(`image_${editableDishId}`);
             const updatedDishDescription = getValues(`description_${editableDishId}`);
+            const imgName = dishes.find(dish => dish.id === editableDishId).image;
 
-                // delete the previous image of the dish before udating content of the dish
-                const deleteImageResponse = await dish.deleteImage(toBeDeleteImageId);
-                if (!deleteImageResponse) {
-                    toast.error('Failed to delete image dish');
-                    return;
+            // delete the previous image of the dish before udating content of the dish
+                if (updatedDishImage[0]) {
+                    const deleteImageResponse = await dish.deleteImage(editableDishId);
+                    // upload the new image of the dish before udating content of the dish
+                    const uploadDishImage = await dish.uploadImage(updatedDishImage[0], editableDishId);
+                    if (!deleteImageResponse) {
+                        toast.error('Failed to delete image dish');
+                        return;
+                    }  
                 }
-                // upload the new image of the dish before udating content of the dish
-                const uploadDishImage = await dish.uploadImage(updatedDishImage[0], editableDishId);
+
                 // now update the dish with new content
                 const updatedDishResponse = await dish.updateDish({
                     name: updatedDishName,
                     price: updatedDishPrice,
                     category: updatedDishCategory,
-                    image: updatedDishImage,
+                    image: updatedDishImage.length > 1 ? updatedDishImage : imgName,
                     description: updatedDishDescription,
                     ID: editableDishId
                 } );
@@ -84,11 +89,15 @@ export default function Table({isDishAdded}) {
                 // toast message based on the response
                 if (updatedDishResponse.$id) {
                     toast.success('Dish updated successfully');
+                    setRefresh(prevRefresh => !prevRefresh);
+                    setEditableDishId(null);
                 } else if (updatedDishResponse === 'Image is not provided') {
                     toast.error('Image is not provided');
                 } else {
                     toast.error('Failed to update dish');
                 }
+                
+                setIsUpdating(false);
         }
     };
     const deleteDish = async (id) => {
@@ -97,14 +106,13 @@ export default function Table({isDishAdded}) {
             if (!imageDeleteResponse) {
                 toast.error('Failed to delete image');
                 return;
-            }else{
-                setToBeDeleteImageId(null);
             }
+            
             // delete the dish
             const deleteResponse = await dish.deleteDish({ ID: id });
             if (deleteResponse) {
                 toast.success('Dish deleted successfully');
-                setRefresh(!refresh);
+                setRefresh(prevRefresh => !prevRefresh);
             } else {
                 toast.error('Failed to delete dish');
             }
@@ -170,19 +178,18 @@ export default function Table({isDishAdded}) {
                                     />
                                 </td>
                                 <td className="px-2 py-1">
-                                    {dish1.id !== editableDishId ? (
-                                    <img src={dish.getDishImagePreview(dish1.id)} alt={dish1.name} className="w-20 h-15" />
+                                {dish1.id !== editableDishId ? (
+                                    !isUpdating && dish1.image ? (  // Only show the image after update
+                                        <img src={dish.getDishImagePreview(dish1.id)} alt={dish1.name} className="w-20 h-15" />
                                     ) : (
+                                        <div className="w-20 h-15 bg-gray-200">Loading...</div>  // Loading placeholder
+                                    )
+                                ) : (
                                     <Input
                                         {...register(`image_${dish1.id}`)}
                                         className={`${dish1.id !== editableDishId ? 'border-none' : ''} w-36`} 
                                         type="file"
                                         disabled={dish1.id !== editableDishId}
-                                        onClick={() => {
-                                            if (dish1.id === editableDishId) {
-                                              setToBeDeleteImageId(dish1.id);
-                                            }
-                                        }}
                                     />
                                     )}
                                 </td>
@@ -197,7 +204,7 @@ export default function Table({isDishAdded}) {
                                 </td>
                                 <td className="px-2 py-1 space-x-2">
                                     <button 
-                                        type="button" // Edit button doesn't submit the form
+                                        type="button"
                                         onClick={() => editButton(dish1.id)} 
                                         className="font-medium text-blue-600 hover:underline cursor-pointer">
                                             {dish1.id !== editableDishId ? 'Edit' : 'Save'}
