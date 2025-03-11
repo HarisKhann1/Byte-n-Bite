@@ -6,10 +6,12 @@ import { toast } from 'sonner'
 
 export default function Table({isDishAdded}) {
     const { register, handleSubmit, formState: { errors }, setFocus, setValue, getValues } = useForm();
-    const [editableDishId, setEditableDishId] = useState(null);
-    const [dishes, setDishes] = useState([]);
-    const [refresh, setRefresh] = useState(false); 
-    const [isUpdating, setIsUpdating] = useState(false);
+    const [editableDishId, setEditableDishId] = useState(null); // Dish ID in edit mode
+    const [dishes, setDishes] = useState([]); // All dishes fetched from the database
+    const [refresh, setRefresh] = useState(false);  // Refresh state for fetching dishes
+    const [isUpdating, setIsUpdating] = useState(false); // Loading state for update action
+    const [searchQuery, setSearchQuery] = useState(''); // Search query for filtering dishes
+    const [displayDishes, setDisplayDishes] = useState([]); // Filtered dishes based on search query
     
     // Fetching all the dishes from the database
     const fetchDishes = useCallback(async () => {
@@ -23,10 +25,12 @@ export default function Table({isDishAdded}) {
                     category: dish.category,
                     image: dish.image,
                     description: dish.description,
+                    originalName: dish.name, // Keep the original name for filtering
+                    originalCategory: dish.category // Keep the original category for filtering
                 }));
                 
-                setDishes(newDishes); 
-                
+                setDishes(newDishes);
+                setDisplayDishes(newDishes);
             }
         } catch (error) {
             toast.error('Failed to fetch dishes');
@@ -36,6 +40,15 @@ export default function Table({isDishAdded}) {
     useEffect(() => {
         fetchDishes();        
     }, [fetchDishes]);
+
+    // Filter dishes based on search query
+    useEffect(() => {
+        const filtered = dishes.filter(dish => 
+            dish.originalName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            dish.originalCategory.toLowerCase().includes(searchQuery.toLowerCase()) 
+        );
+        setDisplayDishes(filtered);
+    }, [searchQuery, dishes]);
 
     const editButton = (id) => {
         // Toggle edit mode for the dish
@@ -47,7 +60,7 @@ export default function Table({isDishAdded}) {
     };
 
     const handleDishChange = useCallback((id, field, value) => {
-        setDishes(prevDishes => 
+        setDisplayDishes(prevDishes => 
             prevDishes.map(dish => 
                 dish.id === id ? { ...dish, [field]: value } : dish
             )
@@ -63,10 +76,10 @@ export default function Table({isDishAdded}) {
             const updatedDishCategory = getValues(`category_${editableDishId}`);
             const updatedDishImage = getValues(`image_${editableDishId}`);
             const updatedDishDescription = getValues(`description_${editableDishId}`);
-            const imgName = dishes.find(dish => dish.id === editableDishId).image;
+            const imgName = dishes.find(dish => dish.id === editableDishId).image; // Get the previous when new image is not given image name of the dish
 
             // delete the previous image of the dish before udating content of the dish
-                if (updatedDishImage[0]) {
+                if (updatedDishImage && updatedDishImage[0]) {
                     const deleteImageResponse = await dish.deleteImage(editableDishId);
                     // upload the new image of the dish before udating content of the dish
                     const uploadDishImage = await dish.uploadImage(updatedDishImage[0], editableDishId);
@@ -81,15 +94,16 @@ export default function Table({isDishAdded}) {
                     name: updatedDishName,
                     price: updatedDishPrice,
                     category: updatedDishCategory,
-                    image: updatedDishImage.length > 1 ? updatedDishImage : imgName,
+                    image: updatedDishImage && updatedDishImage.length > 1 ? updatedDishImage : imgName,
                     description: updatedDishDescription,
                     ID: editableDishId
-                } );
+                });
                 
                 // toast message based on the response
                 if (updatedDishResponse.$id) {
-                    toast.success('Dish updated successfully');
                     setRefresh(prevRefresh => !prevRefresh);
+                    toast.success('Dish updated successfully');
+                    setSearchQuery(''); // Reset the search query
                     setEditableDishId(null);
                 } else if (updatedDishResponse === 'Image is not provided') {
                     toast.error('Image is not provided');
@@ -100,6 +114,7 @@ export default function Table({isDishAdded}) {
                 setIsUpdating(false);
         }
     };
+    
     const deleteDish = async (id) => {
             // delete the image of the dish before deleting the dish
             const imageDeleteResponse = await dish.deleteImage(id);
@@ -119,20 +134,30 @@ export default function Table({isDishAdded}) {
     };
 
     return (
+        <>     
+            <div className="relative overflow-x-auto sm:rounded-lg mx-10 mt-4 translate-y-10">
+                {/* search bar */}
+                <label htmlFor="table-search" className="sr-only">Search</label>
+                <div className="relative mb-2">
+                    <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                        </svg>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="table-search" 
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="block py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-68 bg-gray-50 focus:ring-secondary focus:border-secondary" 
+                        placeholder="Search for dishes"
+                    />
+                </div>
+            </div>
+        
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-10">
-                <div className="pb-4">
-                    <label htmlFor="table-search" className="sr-only">Search</label>
-                    <div className="relative">
-                        <div className="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                            <svg className="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                            </svg>
-                        </div>
-                        <input type="text" id="table-search" className="block py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-68 bg-gray-50 focus:ring-secondary focus:border-secondary" placeholder="Search for dishes"/>
-                    </div>
-                </div>
-
+                {/* Table */}
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs uppercase bg-secondary text-white">
                         <tr>
@@ -145,7 +170,7 @@ export default function Table({isDishAdded}) {
                         </tr>
                     </thead>
                     <tbody>
-                        {dishes.map((dish1) => (
+                        {displayDishes.map((dish1) => (
                             <tr key={dish1.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
                                 <th scope="row" className="px-2 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     <Input 
@@ -209,7 +234,12 @@ export default function Table({isDishAdded}) {
                                         className="font-medium text-blue-600 hover:underline cursor-pointer">
                                             {dish1.id !== editableDishId ? 'Edit' : 'Save'}
                                     </button>
-                                    <button onClick={() => deleteDish(dish1.id)} className="font-medium text-red-600 hover:underline cursor-pointer">Delete</button>
+                                    <button 
+                                        onClick={() => deleteDish(dish1.id)} 
+                                        className="font-medium text-red-600 hover:underline cursor-pointer"
+                                    >
+                                        Delete
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -217,5 +247,6 @@ export default function Table({isDishAdded}) {
                 </table>
             </div>
         </form>
+    </>
     );
 }

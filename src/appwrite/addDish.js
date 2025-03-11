@@ -30,7 +30,7 @@ class Dish {
             conf.appWriteDatabaseId,
             conf.appWriteDishesCollectionId,
             [
-                Query.orderDesc("$updatedAt"),
+                Query.orderDesc("$createdAt"),
 
             ]
         );
