@@ -110,7 +110,6 @@ export default function Table({isDishAdded}) {
                 } else {
                     toast.error('Failed to update dish');
                 }
-                
                 setIsUpdating(false);
         }
     };

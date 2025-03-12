@@ -13,6 +13,7 @@ import Reservation from './pages/Reservation.jsx';
 import Dashboard from './pages/Dashboard/Dashboard.jsx';
 // import dashboard pages
 import AddDishes from './pages/Dashboard/AddDish.jsx';
+import AddCategory from './pages/Dashboard/AddCategory.jsx';
 
 // import components
 import { Signup, Login} from './components/index.js';
@@ -55,7 +56,11 @@ import { Signup, Login} from './components/index.js';
         {
           path: 'add-dish',
           element: <AddDishes />
-        }
+        },
+        {
+          path: 'add-category',
+          element: <AddCategory />
+        },
       ]
     }
   ])

@@ -33,7 +33,6 @@ export default function AddDishes(props) {
         } catch (error) {
             toast.error('Failed to add dish');
         }
-        
     }
 
     return (
