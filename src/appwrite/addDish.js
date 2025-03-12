@@ -38,11 +38,7 @@ class Dish {
 
     async updateDish({name, price,category,image ,description, ID}) {
 
-        console.log(image.length === 0);
         if (image.length === 0) {
-            console.log(`legnth 0`);
-        }
-        if (!image) {
             return `Image is not provided`;
         }
         try {
@@ -85,7 +81,6 @@ class Dish {
     }
 
     async deleteImage(id) {
-        console.log(`appwrite got`,id);
         
         try {
             if (id === null) {
@@ -108,9 +103,7 @@ class Dish {
                 conf.appWriteDishesBucketId,
                 imageId
             );
-        } catch (error) {
-            console.log(error);
-            
+        } catch (error) {            
             return null;
         }
     };

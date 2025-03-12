@@ -11,6 +11,7 @@ export default function ShowCategoryData({isDishAdded}) {
     const [refresh, setRefresh] = useState(false);  // Refresh state for fetching dishes
     const [searchQuery, setSearchQuery] = useState(''); // Search query for filtering dishes
     const [displayDishes, setDisplayDishes] = useState([]); // Filtered dishes based on search query
+    const [isUpdating, setIsUpdating] = useState(false); // Loading state for update action
     
     // Fetching all the dishes from the database
     const getCategories = useCallback(async () => {
@@ -60,14 +61,27 @@ export default function ShowCategoryData({isDishAdded}) {
     }, []);
 
     const onSubmit = async (data) => {
+        setIsUpdating(true);
         // Only proceed when editableDishId is set (i.e., save action triggered)
         if (editableDishId) {
             const updatedDishCategory = getValues(`category_${editableDishId}`);
+            const updatedDishImage = getValues(`image_${editableDishId}`);
+
+             // delete the previous image of the dish before udating content of the dish
+             if (updatedDishImage && updatedDishImage[0]) {
+                const deleteImageResponse = await fetchCategories.deleteImage(editableDishId);
+                // upload the new image of the dish before udating content of the dish
+                const uploadDishImage = await fetchCategories.uploadImage(updatedDishImage[0], editableDishId);
+                if (!deleteImageResponse) {
+                    toast.error('Failed to delete image dish');
+                    return;
+                }  
+            }
 
                 // now update the dish with new content
                 const updatedDishResponse = await fetchCategories.updateCategory({
                     category: updatedDishCategory,
-                    ID: editableDishId
+                    ID: editableDishId,
                 });
                 
                 // toast message based on the response
@@ -79,17 +93,26 @@ export default function ShowCategoryData({isDishAdded}) {
                 } else {
                     toast.error('Failed to update Category');
                 }
-        }
+            }
+            setIsUpdating(false);
+            
     };
     
     const deleteDish = async (id) => {
+            // delete the image of the dish before deleting the dish
+            
+            const imageDeleteResponse = await fetchCategories.deleteImage(id);
+            if (!imageDeleteResponse) {
+                toast.error('Failed to delete image');
+                return;
+            }
             // delete the dish
             const deleteResponse = await fetchCategories.deleteCategory({ ID: id });
             if (deleteResponse) {
-                toast.success('Dish deleted successfully');
+                toast.success('category deleted successfully');
                 setRefresh(prevRefresh => !prevRefresh);
             } else {
-                toast.error('Failed to delete dish');
+                toast.error('Failed to delete category');
             }
     };
 
@@ -123,6 +146,7 @@ export default function ShowCategoryData({isDishAdded}) {
                         <tr>
                             <th scope="col" className="text-center py-3">No.</th>
                             <th scope="col" className="px-2 py-3">Category</th>
+                            <th scope="col" className="px-2 py-3">Image</th>
                             <th scope="col" className="px-2 py-3">Action</th>
                         </tr>
                     </thead>
@@ -142,6 +166,22 @@ export default function ShowCategoryData({isDishAdded}) {
                                         className={dish1.id !== editableDishId ? 'border-none w-full' : 'border-1 border-secondary w-full'}
                                     />
                                 </th>
+                                <td className="px-2 py-1">
+                                {dish1.id !== editableDishId ? (
+                                    !isUpdating && dish1.category ? (  // Only show the image after update
+                                        <img src={fetchCategories.getDishImagePreview(dish1.id)} alt={dish1.name} className="w-20 h-15" />
+                                    ) : (
+                                        <div className="w-20 h-15 bg-gray-200">Loading...</div>  // Loading placeholder
+                                    )
+                                ) : (
+                                    <Input
+                                        {...register(`image_${dish1.id}`)}
+                                        className={`${dish1.id !== editableDishId ? 'border-none' : ''} w-36`} 
+                                        type="file"
+                                        disabled={dish1.id !== editableDishId}
+                                    />
+                                    )}
+                                </td>
                                 <td className="px-2 py-1 space-x-2">
                                     <button 
                                         type="button"

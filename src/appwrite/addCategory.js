@@ -1,24 +1,26 @@
-import { Client, Account, ID, Databases, Query } from 'appwrite';
+import { Client, Account, ID, Databases, Query, Storage} from 'appwrite';
 import conf from '../conf/conf';
 
 class appwriteCategory {
     client = new Client();
     account;
     databases;
+    bucket;
     
     constructor() {
         this.client.setEndpoint(conf.appWriteUrl)
         .setProject(conf.appWriteProjectId)
         this.account = new Account(this.client);
         this.databases = new Databases(this.client);
+        this.bucket = new Storage(this.client);
     }
 
-    async addCategory({ name }) {
+    async addCategory({ name },imageId) {
         try {
             return await this.databases.createDocument(
                 conf.appWriteDatabaseId,
                 conf.appWriteCategoryCollectionId,
-                ID.unique(),
+                imageId,
                 { category: name }
             );
         } catch (error) {
@@ -65,51 +67,47 @@ class appwriteCategory {
         }
     }
 
-//     async uploadImage(image, id = null) {
-//         if (!image) {
-//             return null;
-//         }
-//         try {
-//             return await this.bucket.createFile(
-//                 conf.appWriteDishesBucketId,
-//                 id ? id : ID.unique(),
-//                 image,
-//             )
-//         } catch (error) {
-//             return null;
-//         }
-//     }
+    async uploadImage(image, id = null) {
+        if (!image) {
+            return null;
+        }
+        try {
+            return await this.bucket.createFile(
+                conf.appWriteCategoryBucketId,
+                id ? id : ID.unique(),
+                image,
+            )
+        } catch (error) {
+            return null;
+        }
+    }
 
-//     async deleteImage(id) {
-//         console.log(`appwrite got`,id);
+    async deleteImage(id) {
         
-//         try {
-//             if (id === null) {
-//                 return null;
-//             }else {
-//                 return await this.bucket.deleteFile(
-//                     conf.appWriteDishesBucketId,
-//                     id
-//                 );
-//             }
-//         } catch (error) {
-//             return null;
-//         }
-//     }
+        try {
+            if (id === null) {
+                return null;
+            }else {
+                return await this.bucket.deleteFile(
+                    conf.appWriteCategoryBucketId,
+                    id
+                );
+            }
+        } catch (error) {
+            return null;
+        }
+    }
 
-//     getDishImagePreview(imageId) {
-
-//         try {
-//             return this.bucket.getFilePreview(
-//                 conf.appWriteDishesBucketId,
-//                 imageId
-//             );
-//         } catch (error) {
-//             console.log(error);
-            
-//             return null;
-//         }
-//     };
+    getDishImagePreview(imageId) {
+        try {
+            return this.bucket.getFilePreview(
+                conf.appWriteCategoryBucketId,
+                imageId
+            );
+        } catch (error) {   
+            return null;
+        }
+    };
 }
 
 const addCategory = new appwriteCategory();
