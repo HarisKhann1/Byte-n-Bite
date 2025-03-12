@@ -6,14 +6,29 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { DashboardHeader } from '..'
 import dish from '../../appwrite/addDish'
+import fetchCategories from '../../appwrite/addCategory'
 import { toast } from 'sonner'
 
 export default function AddDishes(props) {
     const { register, handleSubmit, formState: { errors }, setFocus, setValue } = useForm()
     const [isDishAdded, setIsDishAdded] = useState(false);
+    const [categories, setCategories] = useState([]);
+
+    const getCategories = async () => {
+        try {
+            const allCategories = await fetchCategories.getCategories();
+            if (allCategories) {
+                const newCategories = allCategories.documents.map(category => category.category);
+                setCategories(newCategories);
+            }            
+        } catch (error) {
+            toast.error('Failed to fetch categories');
+        }
+    }
 
     useEffect(() => {
         setFocus('name')
+        getCategories();        
     },[])
 
     const onSubmit = async (data) => {
@@ -24,7 +39,6 @@ export default function AddDishes(props) {
                 const response = await dish.addDish(data, uploadDishImage.$id);
                 setValue('name', '');
                 setValue('price', '');
-                setValue('category', '');
                 setValue('image', null);
                 setValue('description', '');
                 toast.success('Dish added successfully');
@@ -67,8 +81,12 @@ export default function AddDishes(props) {
                             name="category" 
                             id="category" 
                             className='sm:w-lg md:w-52 text-secondary py-2 px-4 rounded border focus:border-2 focus:border-secondary transition duration-300 ease-in-out'
-                        >
-                            <option>Select a category</option>                            
+                        >   
+                            {categories.map((category, index) => (
+                                <option 
+                                    className='text-secondary w-sm sm:w-lg md:w-52'
+                                    key={index} value={category}>{category}</option>
+                            ))}
                         </select>
                         {errors.category && <span className='text-red-500'>{errors.category.message}</span>}
                     </div>

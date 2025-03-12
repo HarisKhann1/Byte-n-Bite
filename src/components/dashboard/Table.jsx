@@ -160,6 +160,7 @@ export default function Table({isDishAdded}) {
                 <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                     <thead className="text-xs uppercase bg-secondary text-white">
                         <tr>
+                            <th scope="col" className="text-center px-1 py-3">No.</th>
                             <th scope="col" className="px-6 py-3">Name</th>
                             <th scope="col" className="px-2 py-3">Price</th>
                             <th scope="col" className="px-2 py-3">Category</th>
@@ -169,8 +170,11 @@ export default function Table({isDishAdded}) {
                         </tr>
                     </thead>
                     <tbody>
-                        {displayDishes.map((dish1) => (
+                        {displayDishes.map((dish1,index) => (
                             <tr key={dish1.id} className="bg-white border-b border-gray-200 hover:bg-gray-50">
+                                 <th scope="row" className="text-center py-4 font-medium text-gray-900 whitespace-nowrap">
+                                    {index + 1}
+                                </th>
                                 <th scope="row" className="px-2 py-4 font-medium text-gray-900 whitespace-nowrap">
                                     <Input 
                                         {...register(`name_${dish1.id}`, { required: "Enter dish name" })}
