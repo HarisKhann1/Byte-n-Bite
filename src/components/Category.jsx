@@ -1,64 +1,57 @@
-import React,{useEffect, useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import { Container, Button } from './index'
 import beefHaleemImage from '../assets/images/Beef Haleem.jpg'
-import { useParams } from 'react-router-dom';
-import { use } from 'react';
-import appwriteDishService from '../appwrite/addDish'
+import appwriteCategoryService from '../appwrite/addCategory'
+export default function Category(props) {
+    const [categories, setCategories] = useState([])
 
-export default function WeekMenu(props) {
-    const { categoryName } = useParams();
-    const [filteredDishes, setFilteredDishes] = useState([]);
-    const fetchDishesByCategory = async () => {
+    const fetchCategories = async () => {
         try {
-            const response = await appwriteDishService.getFilterDishes(categoryName);
+            const response = await appwriteCategoryService.getCategories()
             if (response) {
                 const data = response.documents.map((item) => {
                     return {
                         id: item.$id,
-                        name: item.name,
-                        price: item.price,
-                        description: item.description,
-                    };
-                });
-                setFilteredDishes(data);
+                        categoryName: item.category,
+                    }
+                })
+                setCategories(data)
             }
         } catch (error) {
-            console.log(error);
+            console.error('error', error)
         }
     }
+
     useEffect(() => {
-        fetchDishesByCategory();
-    }, [categoryName])
-    
+        fetchCategories()
+    }, [])
 
     return (
         <Container>
             <section>
                 <div className='py-8 flex flex-col gap-8'>
                     <div className='flex justify-between items-center flex-wrap gap-2'>
-                        <h2 className='text-[1.2rem] font-medium md:font-semibold md:text-3xl lg:text-4xl'>{categoryName} Menu</h2>
+                        <h2 className='text-[1.2rem] font-medium md:font-semibold md:text-3xl'>Discover Our Exciting Range of Categories!</h2>
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-8 lg:grid-cols-4'>
                         {/* card */}
-                        { filteredDishes.map((item, idx) => (
+                        { categories.map((item, idx) => (
                             <div key={item.id} className='flex gap-4 flex-col rounded-2xl shadow-md overflow-hidden transition-transform duration-300 transform hover:scale-105'>
                                 <div>
                                     <img 
                                         className='w-full h-48 object-cover transition-transform duration-300 transform hover:scale-105'
-                                        src={appwriteDishService.getDishImagePreview(item.id)} 
-                                        alt={item.name} 
+                                        src={appwriteCategoryService.getDishImagePreview(item.id)} 
+                                        alt={item.categoryName} 
                                     />
                                 </div>
                                 <div className='px-4 pb-4 flex flex-col gap-3'>
                                     <div className='flex gap-4 flex-wrap justify-between items-center'>
-                                        <h3 className='font-medium'>{ item.name }</h3>
-                                        <p className='text-secondary text-sm'>Rs.{ item.price }</p>
+                                        <h3 className='font-medium'>{ item.categoryName }</h3>
                                     </div>
-                                    <p className='text-gray-600 text-sm'>{ item.description }</p>
-                                    <Link to={'/menu'}>
+                                    <Link to={`/menu/${item.categoryName}`}>
                                         <Button type='button' className='bg-primary text-sm font-medium w-32 sm:max-w-36 text-center cursor-pointer'>
-                                            Order now
+                                            View all items
                                         </Button>
                                     </Link>
                                 </div>

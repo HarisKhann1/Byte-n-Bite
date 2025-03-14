@@ -31,9 +31,24 @@ class Dish {
             conf.appWriteDishesCollectionId,
             [
                 Query.orderDesc("$createdAt"),
-
+                Query.limit(10)
             ]
         );
+    }
+
+    async getFilterDishes(category) {
+        try {
+            return await this.databases.listDocuments(
+                conf.appWriteDatabaseId,
+                conf.appWriteDishesCollectionId,
+                [
+                    Query.orderDesc("$createdAt"),
+                    Query.equal('category', category)
+                ]
+            );
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     async updateDish({name, price,category,image ,description, ID}) {

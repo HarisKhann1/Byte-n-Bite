@@ -1,12 +1,12 @@
 import React from 'react'
-import { HeroSection, WeekMenu, FreinedsSection, FAQs, Loader } from '../components/index'
+import { HeroSection, Category, FreinedsSection, FAQs, Loader } from '../components/index'
 
 export default function Home(props) {
     
     return (
         <main>
             <HeroSection />
-            <WeekMenu />
+            <Category />
             <FreinedsSection />
             <FAQs />
         </main>

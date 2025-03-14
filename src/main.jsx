@@ -28,7 +28,7 @@ import { Signup, Login} from './components/index.js';
           element: <Home />
         },
         {
-          path: '/menu',
+          path: '/menu/:categoryName',
           element: <Menu />
         },
         {
