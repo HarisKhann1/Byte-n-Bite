@@ -33,7 +33,6 @@ class AuthUser {
      */
 
     async createAccount(email, password, name) {
-        console.log("Creating account: ", email, password, name);
         try {
             return await this.account.create(ID.unique(), email, password, name);
             // const userAccount = await this.account.create(ID.unique(), email, password, { name: fullname });
@@ -56,13 +55,31 @@ class AuthUser {
      * @param {string} password - The password for the user account.
      * @returns {Promise} A promise that resolves to the user account object.
      */
-
-    async login({email, password}) {
+    
+    async login(email, password) {
         try {
             // return login session
             return await this.account.createEmailPasswordSession(email, password);
         } catch (error) {
             console.log("Error logging in: ", error);
+        }
+    }
+    
+
+    async getCurrentUser() {
+        try {
+            return await this.account.get();
+        } catch (error) {
+            console.log("Error getting current user: ", error);
+        }
+        return null;
+    }
+    
+    async logout() {
+        try {
+            return await this.account.deleteSession('current');
+        } catch (error) {
+            console.log("Error logging out: ", error);
         }
     }
 }

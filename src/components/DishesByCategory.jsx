@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function DishesByCategory(props) {
+export function DishesByCategory({category}) {
     
 
     return (

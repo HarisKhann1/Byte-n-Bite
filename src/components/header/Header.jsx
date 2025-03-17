@@ -4,17 +4,28 @@ import Container from '../Container'
 import Button from '../Button'
 import {Link, NavLink} from 'react-router-dom'
 import { Outlet } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { login, logout } from '../../store/authSlice'
+import authService from '../../appwrite/auth'
 
 export default function Header() {
     const [isMobileMenuOpen, SetisMobileMenuOpen] = useState(false);
-
+    const dispactch = useDispatch();
+    const authStatus = useSelector((state) => state.auth.status);
+    
     const navItem = [
         { title: 'Home', link: '/' },
         { title: 'Menu',  link: '/menu' },
         { title: 'Reservation', link: '/reservation' },
-        { title: 'My orders', link: '/my-orders' },
+        { title: 'Cart', link: '/my-orders' },
     ]
 
+    const logoutBtn = async () => {
+        const response = authService.logout();
+        if (response) {
+            dispactch(logout())
+        }
+    }
     return (
         <>
         <header 
@@ -38,6 +49,15 @@ export default function Header() {
                                     </li>
                                 )
                             )}
+                            {authStatus ? (
+                            <li>
+                            <Button 
+                                onClick={logoutBtn}
+                                className='bg-red-600 hover: hover:bg-red-700 transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
+                                    Logout
+                            </Button>
+                        </li>
+                            ) : (
                             <li>
                                 <Link to={'/login'}>
                                     <Button className='bg-secondary hover: hover:bg-[#3a4a43] transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
@@ -45,6 +65,8 @@ export default function Header() {
                                     </Button>
                                 </Link>
                             </li>
+                            )
+                            }
                         </ul>
                     </div>
 
@@ -73,13 +95,24 @@ export default function Header() {
                                             </li>
                                         )
                                     )}
-                                    <li>
-                                        <Link to={'/login'}>
-                                            <Button onClick={() => SetisMobileMenuOpen(false)} className='bg-secondary hover: hover:bg-[#3a4a43] transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
-                                                Login
+                                    {authStatus ? (
+                                        <li>
+                                            <Button 
+                                            onClick={logoutBtn}
+                                            className='bg-red-600 hover: hover:bg-red-700 transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
+                                                Logout
                                             </Button>
-                                        </Link>
-                                    </li>
+                                        </li>
+                                        ) : (
+                                        <li>
+                                            <Link to={'/login'}>
+                                                <Button className='bg-secondary hover: hover:bg-[#3a4a43] transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
+                                                    Login
+                                                </Button>
+                                            </Link>
+                                        </li>
+                                        )
+                                        }
                                 </ul>
                             </div>
                         )}

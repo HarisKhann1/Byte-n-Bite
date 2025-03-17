@@ -9,6 +9,7 @@ import showPasswordImage from '../assets/images/show-password-48.png'
 import hidePasswordImage from '../assets/images/blind-40.png'
 import { set, useForm } from 'react-hook-form';
 import authService from '../appwrite/auth';
+import { toast } from 'sonner';
 
 export default function Signup(props) {
     const [creatingAccount, setCreatingAccount] = useState(false);
@@ -23,7 +24,6 @@ export default function Signup(props) {
     
     useEffect(() => {
         if (isPassword2Focused && (watch('password') !== watch('password2'))) {
-            console.log('passwords do not match');
             setisPasswordsMatch(false)
             return;
         }
@@ -44,9 +44,7 @@ export default function Signup(props) {
             setCreatingAccount(false);
             
             if (userData) {
-                
-                console.log('submitted');
-                console.log(data);
+                toast.success('Account created successfully');
             }
         } catch (error) {
             console.log('Signup :: Error creating account: ', error);
@@ -158,7 +156,7 @@ export default function Signup(props) {
                                         disabled={creatingAccount} 
                                         type="submit" 
                                         className={`min-w-64 md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out ${creatingAccount ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                                        {creatingAccount ? 'Creating Account...' : 'Login'}
+                                        {creatingAccount ? 'Creating Account...' : 'Signup'}
                                     </Button>
                                 </div>
                             </form>

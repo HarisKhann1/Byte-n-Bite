@@ -78,24 +78,22 @@ export default function ReservationForm(props) {
                                 </div>
                                 {/* row 2 */}
                                 <div className='flex flex-col md:flex-row md:justify-between gap-6'>
-                                    {/* email div */}
+                                    <div>
+                                       {/* date div */}
                                     <div>
                                         <Input
-                                            { ...register("email",
-                                                {
-                                                    required: "Email is required.",
-                                                    pattern: {
-                                                        value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-                                                        message: "Invalid email address."
-                                                    }
+                                            { ...register("date",
+                                                { 
+                                                    required: "Date is required.",
                                                 }
-                                            )}  
-                                            label='Email' 
-                                            type='text' 
-                                            className={`min-w-64 md:w-full ${redBorderONError(errors.email)}`} 
-                                            placeholder='Enter your email'
+                                            )} 
+                                            label='Reservation Date' 
+                                            type='date' 
+                                            className={`min-w-64 md:w-full ${redBorderONError(errors.date)}`} 
+                                            placeholder='Enter reservation date'
                                         />
-                                        {errors.email && <p className="text-red-500 text-sm pl-1">{errors.email.message}</p>}
+                                        {errors.date && <p className="text-red-500 text-sm">{errors.date.message}</p>}
+                                    </div>
                                     </div>  
                                     {/* phone number div */}
                                     <div>
@@ -119,35 +117,35 @@ export default function ReservationForm(props) {
                                 </div>
                                 {/* row 3 */}
                                 <div className='flex flex-col md:flex-row md:justify-between gap-6'>
-                                    {/* date div */}
-                                    <div>
-                                        <Input
-                                            { ...register("date",
-                                                { 
-                                                    required: "Date is required.",
-                                                }
-                                            )} 
-                                            label='Reservation Date' 
-                                            type='date' 
-                                            className={`min-w-64 md:w-full ${redBorderONError(errors.date)}`} 
-                                            placeholder='Enter reservation date'
-                                        />
-                                        {errors.date && <p className="text-red-500 text-sm">{errors.date.message}</p>}
-                                    </div>
                                     {/* time div */}
                                     <div>
                                         <Input
-                                            { ...register("time",
+                                            { ...register("start_time",
                                                 { 
                                                     required: "Time is required.",
                                                 }
                                             )} 
-                                            label='Enter your password' 
+                                            label='Enter start time' 
                                             type='time' 
                                             className={`min-w-64 md:w-full ${redBorderONError(errors.time)}`} 
-                                            placeholder='Confirm your password'
+                                            placeholder='Enter start time'
                                         />
-                                        {errors.time && <p className="text-red-500 text-sm">{errors.time.message}</p>}
+                                        {errors.start_time && <p className="text-red-500 text-sm">{errors.start_time.message}</p>}
+                                    </div>
+                                    {/* time div */}
+                                    <div>
+                                        <Input
+                                            { ...register("end_time",
+                                                { 
+                                                    required: "Time is required.",
+                                                }
+                                            )} 
+                                            label='Enter end time' 
+                                            type='time' 
+                                            className={`min-w-64 md:w-full ${redBorderONError(errors.time)}`} 
+                                            placeholder='Enter end time'
+                                        />
+                                        {errors.end_time && <p className="text-red-500 text-sm">{errors.end_time.message}</p>}
                                     </div>
                                 </div>
                                 {/* text area */}

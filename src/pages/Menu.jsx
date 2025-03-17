@@ -7,7 +7,7 @@ export default function Menu(props) {
     return (
         <div className='my-20'>
             <Container>
-            <Card />
+                <Card />
             </Container>
         </div>
     )

@@ -4,22 +4,35 @@ import Input from './Input'
 import { useEffect, useRef } from 'react';
 import sigupImage from '../assets/images/Sigup_image.jpg'
 import Button from './Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import showPasswordImage from '../assets/images/show-password-48.png'
 import hidePasswordImage from '../assets/images/blind-40.png'
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner'
+import authService from '../appwrite/auth'
+import { useDispatch } from 'react-redux';
+import { login } from '../store/authSlice';
 
 export default function Login(props) {
     const [isPasswordHidden, setisPasswordHidden] = React.useState(true)
     const { register, handleSubmit, formState: { errors }, setFocus } = useForm();
-    
-    const onSubmit = (data) => {
-        toast.success('Login successful');
-        console.log('submitted');
-        console.log(data);
-    }
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
+    const onSubmit = async (data) => {
+        const sessionResponse = await authService.login(data.email, data.password);
+        
+        if (sessionResponse.error) {
+            toast.error(sessionResponse.message);
+            return;
+        }
+        if (sessionResponse) {
+            const userData = await authService.getCurrentUser();
+            dispatch(login(userData));
+            toast.success('Login successful');
+            navigate('/')
+        }
+    }
     useEffect(() => {
         setFocus('email') // Focus only on the first render
     }, [setFocus]);
