@@ -8,19 +8,43 @@ import { Link } from 'react-router-dom';
 import showPasswordImage from '../assets/images/show-password-48.png'
 import hidePasswordImage from '../assets/images/blind-40.png'
 import { set, useForm } from 'react-hook-form';
-
+import reservationService from '../appwrite/reservation';
+import { useSelector } from 'react-redux'
+import { toast } from 'sonner'
 
 export default function ReservationForm(props) {
-    const { register, handleSubmit, formState: { errors }, setFocus } = useForm();
+    const { register, handleSubmit, formState: { errors }, setFocus, setValue } = useForm();
+    const user_id = useSelector(state => state.auth.userData.$id);
+    const [orders, setOrders] = useState([]);
+    const [response, setResponse] = useState(false);
 
     useEffect(() => {
         setFocus('fullname'); // Focus only on the first render
-    }, [setFocus]);
+        reservationService.getReservation(user_id).then((response) => {
+            if (response) {
+                setOrders(response.documents);
+            }
+        });
+    }, [setFocus, response]);
+
+    
     
     
     const onSubmit = (data) => {
-        console.log('submitted');
-        console.log(data);
+        
+        reservationService.reservation(data, user_id).then((response) => {
+            if (response) {
+                toast.success('Reservation successful');
+                setValue('fullname', '');
+                setValue('people', '');
+                setValue('date', '');
+                setValue('phoneNO', '');
+                setValue('start_time', '');
+                setValue('end_time', '');
+                setValue('extra_info', '');
+                setResponse((prev) => !prev);
+            }
+        });
     }
 
     const redBorderONError = (inputBox) => {
@@ -29,7 +53,7 @@ export default function ReservationForm(props) {
     
     return (
         <section className='pt-25 pb-10 flex flex-col items-center'>
-                <div className='bg-[#ebf1f4] p-8 lg:pl-10 pb-10 rounded-3xl shadow-md flex flex-row md:gap-12 lg:gap-8 justify-between'>
+                <div className='mb-10 bg-[#ebf1f4] p-8 lg:pl-10 pb-10 rounded-3xl shadow-md flex flex-row md:gap-12 lg:gap-8 justify-between'>
                     <div className='flex flex-col md:gap-12'>
                         <div className='hidden md:block text-center w-28'>
                             <h2 className='border-2 border-secondary py-1 font-medium px-4 rounded-2xl'>Byte&Bite</h2>
@@ -153,7 +177,7 @@ export default function ReservationForm(props) {
                                 <textarea 
                                     id='extra-info'
                                     className='text-secondary font-medium text-lg -mt-2 min-w-64 md:w-full pr-14 border border-secondary rounded-md p-2 outline-none focus:border-2' 
-                                    { ...register("extra-info")}
+                                    { ...register("extra_info")}
                                 />
                                 {/* sumit button */}
                                 <div>
@@ -165,6 +189,55 @@ export default function ReservationForm(props) {
                         </div>
                     </div>
                 </div>
+                {/* table for a person registration list */}
+                <Container>
+                <div className='my-10 flex justify-between items-center flex-wrap gap-2'>
+                 <h2 className='text-secondary text-[1.2rem] font-medium md:font-semibold md:text-3xl lg:text-4xl'>My Reservation list</h2>
+            </div>
+            <table className="-mt-6 w-full text-sm text-left rtl:text-right text-gray-500">
+            <thead className="text-xs uppercase bg-secondary text-white">
+                            <tr className='text-center'>
+                                <th scope="col" className="text-center px-1 py-3">No.</th>
+                                <th scope="col" className="px-6 py-3">Name</th>
+                                <th scope="col" className="px-2 py-3">People</th>
+                                <th scope="col" className="px-2 py-3">Date</th>
+                                <th scope="col" className="px-2 py-3">Start Time</th>
+                                <th scope="col" className="px-2 py-3">End Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {orders.map((dish1, index) => (
+                                <tr key={index} className="text-center bg-white border-b border-gray-200 hover:bg-gray-50">
+                                    <th scope="row" className="text-center py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        {index + 1}
+                                    </th>
+                                    <th scope="row" className="px-2 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        {dish1.name}
+                                    </th>
+                                    <th scope="row" className="px-2 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                        {dish1.people}
+                                    </th>
+                                    <td className="px-2 py-1 space-x-2">
+                                    {dish1.date.split('T')[0]}
+                                    </td>
+                                    <td className="px-2 py-1 space-x-2">
+                                        {dish1.start_time}
+                                    </td>
+                                    <td className="px-2 py-1 space-x-2">
+                                        {dish1.end_time}
+                                    </td>
+                                </tr>
+                            ))}
+                            {orders.length === 0 && (
+                                <tr className='text-center'>
+                                    <td colSpan='8'>
+                                        <h2 className='text-lg font-medium text-secondary'>Order list is empty</h2>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </Container>
         </section>
     )
 }
