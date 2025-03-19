@@ -192,7 +192,10 @@ export default function ReservationForm(props) {
                 {/* table for a person registration list */}
                 <Container>
 {/* table start */}
-<div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-10">
+                <div className='ml-10 mt-10 mb-2 flex justify-between items-center flex-wrap gap-2'>
+                     <h2 className='text-secondary text-[1.2rem] font-medium md:font-semibold md:text-3xl lg:text-4xl'>My Orders list</h2>
+                </div>
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-10">
                         <table className="w-full text-sm text-left rtl:text-right text-gray-500">
                             <thead className="text-xs uppercase bg-secondary text-white">
                                 <tr className='text-center'>
@@ -244,7 +247,7 @@ export default function ReservationForm(props) {
                                 )}
                             </tbody>
                         </table>
-                    </div>
+                </div>
                     {/* table end */}     
                 </Container>
         </section>

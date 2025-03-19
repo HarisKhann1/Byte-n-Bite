@@ -10,8 +10,13 @@ import hidePasswordImage from '../assets/images/blind-40.png'
 import { set, useForm } from 'react-hook-form';
 import authService from '../appwrite/auth';
 import { toast } from 'sonner';
+import { useDispatch } from 'react-redux';
+import { login } from '../store/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Signup(props) {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const [creatingAccount, setCreatingAccount] = useState(false);
     const [isPasswordsMatch, setisPasswordsMatch] = useState(true)
     const [isPasswordHidden, setisPasswordHidden] = useState(true)
@@ -45,6 +50,9 @@ export default function Signup(props) {
             
             if (userData) {
                 toast.success('Account created successfully');
+                const userData = await authService.getCurrentUser()
+                if(userData) dispatch(login(userData));
+                navigate("/")
             }
         } catch (error) {
             console.log('Signup :: Error creating account: ', error);

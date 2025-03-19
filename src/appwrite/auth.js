@@ -34,13 +34,12 @@ class AuthUser {
 
     async createAccount(email, password, name) {
         try {
-            return await this.account.create(ID.unique(), email, password, name);
-            // const userAccount = await this.account.create(ID.unique(), email, password, { name: fullname });
-            // if (userAccount) {
-            //     return account.login(email, password );
-            // }else {
-            //     return userAccount;
-            // }
+            const userAccount = await this.account.create(ID.unique(), email, password, name );
+            if (userAccount) {
+                return this.login(email, password );
+            }else {
+                return userAccount;
+            }
         } catch (error) {
             console.log("Error creating account: ", error);
         }
