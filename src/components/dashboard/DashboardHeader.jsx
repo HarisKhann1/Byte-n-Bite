@@ -32,7 +32,7 @@ const Header = ({ title = 'Add Title' }) => {
 
           {/* mobile menu */}
           {isMobileMenuOpen && (
-              <div className='border border-secondary lg:hidden absolute right-0 top-16 bg-white w-full py-4 px-6 rounded-br-2xl rounded-bl-2xl
+              <div className='border border-secondary lg:hidden absolute z-10 right-0 top-16 bg-white w-full py-4 px-6 rounded-br-2xl rounded-bl-2xl
                   transition-all duration-300 ease-in-out
               '>
                   <ul className='text-secondary flex items-start justify-between gap-2 font-semibold flex-col'>

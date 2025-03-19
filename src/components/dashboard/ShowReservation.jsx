@@ -3,6 +3,7 @@ import Container from '../Container'
 import reservationService from '../../appwrite/reservation';
 import { useSelector } from 'react-redux'
 import {useNavigate} from 'react-router-dom'
+import { DashboardHeader } from '..';
 
 export default function ShowReservation(props) {
     const navigate = useNavigate();
@@ -24,8 +25,8 @@ export default function ShowReservation(props) {
 
     return (
         <>
-            <Container>
-                <div className='mt-32'>
+                <DashboardHeader title='Reservation List'/>
+                <div className='mt-10 lg:mt-32'>
                     <div className='pl-10 my-4 flex justify-between items-center flex-wrap gap-2'>
                              <h2 className='text-secondary text-[1.2rem] font-medium md:font-semibold md:text-3xl lg:text-4xl'>Reservation list</h2>
                     </div>
@@ -86,7 +87,6 @@ export default function ShowReservation(props) {
                     </div>
                     {/* table end */}
                 </div>
-            </Container>
         </>
     )
 }
