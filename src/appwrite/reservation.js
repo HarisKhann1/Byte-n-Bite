@@ -38,7 +38,22 @@ class Reservation {
         } catch (error) {
             console.log('error :: at reservation',error);
         }
-    }    
+    }
+    
+    async getAllReservation() {
+        try {
+            return await this.databases.listDocuments(
+                conf.appWriteDatabaseId,
+                conf.appWriteReservationCollectionId,
+                [
+                    Query.orderDesc("$createdAt"),
+                    Query.limit(10)
+                ]
+            );
+        } catch (error) {
+            console.log('error :: at reservation', error);
+        }
+    }
 }
 
 const reservation = new Reservation();

@@ -35,7 +35,7 @@ export default function AddCategory(props) {
 
     return (
         <section className='space-y-15'>
-            <DashboardHeader title='Add Dishes'/>
+            <DashboardHeader title='Add Category'/>
             <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col items-center justify-center mt-10 gap-5 mx-auto'>
                 <div className='flex flex-col gap-4 md:gap-5 md:w-2xl justify-between'>
                     <div className='flex flex-col gap-4'>
