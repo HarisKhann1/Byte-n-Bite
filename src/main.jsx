@@ -21,6 +21,7 @@ import AddCategory from './pages/Dashboard/AddCategory.jsx';
 
 // import components
 import { Signup, Login} from './components/index.js';
+import DashboardLogin from './components/dashboard/Login.jsx'
 
   const router = createBrowserRouter([
     {
@@ -57,6 +58,10 @@ import { Signup, Login} from './components/index.js';
       path: '/dashboard',
       element: <Dashboard />,
       children: [
+        {
+          path: 'login',
+          element: <DashboardLogin />
+        },
         {
           path: 'add-dish',
           element: <AddDishes />

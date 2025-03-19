@@ -1,7 +1,15 @@
 // src/components/Sidebar.jsx
 import { NavLink } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { adminLogout } from '../../store/adminAuthSlice'
+import auth from '../../appwrite/auth'
+const Sidebar = () => {
+        const dispatch = useDispatch();
 
-const Sidebar = ({ onLogout }) => {
+        const handleLogout = async () => {
+                dispatch(adminLogout()); 
+        };
+
 return (
             <div className="bg-gray-800 w-72 p-5 text-white h-screen hidden lg:block">
                     <div className='hidden md:block text-center'>
@@ -14,7 +22,7 @@ return (
                         <NavLink to="/reservations" className="block py-2 px-4 hover:bg-gray-700 rounded">Reservations</NavLink>
                     </nav>
                     <button 
-                            onClick={onLogout}
+                            onClick={handleLogout}
                             className="mt-8 py-2 px-4 bg-red-600 rounded text-white w-full hover:bg-red-700">
                                     Logout
                     </button>

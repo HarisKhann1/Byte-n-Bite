@@ -1,5 +1,5 @@
 import conf from '../conf/conf';
-import { Client, Account, ID } from 'appwrite';
+import { Client, Account, ID, Query } from 'appwrite';
 
 class AuthUser {
     client = new Client();
@@ -60,6 +60,22 @@ class AuthUser {
         try {
             // return login session
             return await this.account.createEmailPasswordSession(email, password);
+        } catch (error) {
+            console.log("Error logging in: ", error);
+        }
+    }
+
+    async adminLogin(email, password) {
+        try {
+            // return login session
+            return await this.account.createEmailPasswordSession(
+                email, 
+                password,
+                [
+                    Query.equal("Identifiers", email),
+                    Query.equal("Labels", "admin")
+                ]
+            );
         } catch (error) {
             console.log("Error logging in: ", error);
         }

@@ -8,6 +8,7 @@ const conf = {
     appWriteReservationCollectionId: String(import.meta.env.VITE_APPWRITE_RESERVATION_COLLECTION_ID),
     appWriteDishesBucketId: String(import.meta.env.VITE_APPWRITE_DISHES_BUCKET_ID),
     appWriteCategoryBucketId: String(import.meta.env.VITE_APPWRITE_CATEGORY_BUCKET_ID),
+    appWriteAdminCollectionId: String(import.meta.env.VITE_APPWRITE_ADMIN_COLLECTION_ID),
 }
 
 export default conf
