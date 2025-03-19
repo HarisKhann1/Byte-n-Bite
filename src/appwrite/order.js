@@ -31,13 +31,28 @@ class Order {
                 conf.appWriteDatabaseId,
                 conf.appWriteOrderCollectionId,
                 [
-                    Query.equal("user_id", userId)
+                    Query.equal("user_id", userId),
                 ]
             ); 
         } catch (error) {
             console.log('error :: Order retrival',error);
         }
-    }    
+    }
+    
+    async getAllOrders() {
+        try {
+            return await this.databases.listDocuments(
+                conf.appWriteDatabaseId,
+                conf.appWriteOrderCollectionId,
+                [
+                    Query.orderDesc("$createdAt"),
+                    Query.limit(10)
+                ]
+            ); 
+        } catch (error) {
+            console.log('error :: Order retrival',error);
+        }
+    }
 }
 
 const order = new Order();

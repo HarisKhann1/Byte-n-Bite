@@ -23,6 +23,7 @@ import AddCategory from './pages/Dashboard/AddCategory.jsx';
 import { Signup, Login} from './components/index.js';
 import DashboardLogin from './components/dashboard/Login.jsx'
 import ShowReservation from './components/dashboard/ShowReservation.jsx'
+import Orders from './components/dashboard/Orders.jsx'
 
   const router = createBrowserRouter([
     {
@@ -74,6 +75,10 @@ import ShowReservation from './components/dashboard/ShowReservation.jsx'
         {
           path: 'reservations',
           element: <ShowReservation />
+        },
+        {
+          path: 'order',
+          element: <Orders />
         },
       ]
     }

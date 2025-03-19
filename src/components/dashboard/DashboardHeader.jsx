@@ -2,18 +2,22 @@ import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import Button from '../Button';
 import Container from '../Container';
-
+import { useDispatch, useSelector } from 'react-redux';
+import {adminLogout} from '../../store/adminAuthSlice'
 
 const Header = ({ title = 'Add Title' }) => {
   const [isMobileMenuOpen, SetisMobileMenuOpen] = useState(false);
-
+  const dispatch = useDispatch();
+  const adminAuthStatus = useSelector((state) => state.adminAuth.status);
   const navItem = [
-    { title: 'Add dish', link: '/' },
-    { title: 'Add Category',  link: '/menu' },
-    { title: 'Orders', link: '/reservation' },
-    { title: 'Reservations', link: '/my-orders' },
+    { title: 'Add Dish', link: '/dashboard/add-dish' },
+    { title: 'Add Category', link: '/dashboard/add-category' },
+    { title: 'Orders', link: '/dashboard/order' },
+    { title: 'Reservations', link: '/dashboard/reservations' },
   ]
-
+    const handleAdminLogout = () => {
+        dispatch(adminLogout());
+    }
     return (
       <header 
         className="bg-gray-800 border border-gray-500 text-white
@@ -22,7 +26,7 @@ const Header = ({ title = 'Add Title' }) => {
           {/* header for smaller devices */}
           <div className='lg:hidden mr-2 w-16'>
               <Button 
-                  onClick={() => SetisMobileMenuOpen(!isMobileMenuOpen)}
+                  onClick={() => SetisMobileMenuOpen((prev) => !prev)}
               >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
@@ -44,13 +48,15 @@ const Header = ({ title = 'Add Title' }) => {
                               </li>
                           )
                       )}
+                      {adminAuthStatus && (
                       <li>
-                          <Link to={'/login'}>
-                              <Button onClick={() => SetisMobileMenuOpen(false)} className='bg-secondary hover: hover:bg-[#3a4a43] transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
-                                  Login
-                              </Button>
-                          </Link>
+                        <Button onClick={handleAdminLogout} 
+                            className='bg-red-500 hover:bg-red-600 transform hover:scale-105 duration-300 text-white px-6 py-2 rounded-full cursor-pointer'>
+                            Logout
+                        </Button>
                       </li>
+                    )
+                    }
                   </ul>
               </div>
           )}

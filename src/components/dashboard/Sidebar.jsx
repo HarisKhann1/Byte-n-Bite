@@ -8,7 +8,7 @@ const Sidebar = () => {
         const navItem = [
                 { title: 'Add Dish', link: '/dashboard/add-dish' },
                 { title: 'Add Category', link: '/dashboard/add-category' },
-                { title: 'Orders', link: '/orders' },
+                { title: 'Orders', link: '/dashboard/order' },
                 { title: 'Reservations', link: '/dashboard/reservations' },
         ]
         const handleLogout = async () => {
