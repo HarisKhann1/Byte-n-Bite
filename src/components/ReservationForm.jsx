@@ -15,14 +15,14 @@ import { toast } from 'sonner'
 export default function ReservationForm(props) {
     const { register, handleSubmit, formState: { errors }, setFocus, setValue } = useForm();
     const user_id = useSelector(state => state.auth.userData.$id);
-    const [orders, setOrders] = useState([]);
+    const [reservation, setReservation] = useState([]);
     const [response, setResponse] = useState(false);
 
     useEffect(() => {
         setFocus('fullname'); // Focus only on the first render
         reservationService.getReservation(user_id).then((response) => {
             if (response) {
-                setOrders(response.documents);
+                setReservation(response.documents);
             }
         });
     }, [setFocus, response]);
@@ -179,7 +179,7 @@ export default function ReservationForm(props) {
                                     className='text-secondary font-medium text-lg -mt-2 min-w-64 md:w-full pr-14 border border-secondary rounded-md p-2 outline-none focus:border-2' 
                                     { ...register("extra_info")}
                                 />
-                                {/* sumit button */}
+                                {/* submit button */}
                                 <div>
                                     <Button type='submit' className='min-w-64 md:w-full bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out'>
                                         Reserve a Table
@@ -191,52 +191,61 @@ export default function ReservationForm(props) {
                 </div>
                 {/* table for a person registration list */}
                 <Container>
-                <div className='my-10 flex justify-between items-center flex-wrap gap-2'>
-                 <h2 className='text-secondary text-[1.2rem] font-medium md:font-semibold md:text-3xl lg:text-4xl'>My Reservation list</h2>
-            </div>
-            <table className="-mt-6 w-full text-sm text-left rtl:text-right text-gray-500">
-            <thead className="text-xs uppercase bg-secondary text-white">
-                            <tr className='text-center'>
-                                <th scope="col" className="text-center px-1 py-3">No.</th>
-                                <th scope="col" className="px-6 py-3">Name</th>
-                                <th scope="col" className="px-2 py-3">People</th>
-                                <th scope="col" className="px-2 py-3">Date</th>
-                                <th scope="col" className="px-2 py-3">Start Time</th>
-                                <th scope="col" className="px-2 py-3">End Time</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {orders.map((dish1, index) => (
-                                <tr key={index} className="text-center bg-white border-b border-gray-200 hover:bg-gray-50">
-                                    <th scope="row" className="text-center py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {index + 1}
-                                    </th>
-                                    <th scope="row" className="px-2 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                        {dish1.name}
-                                    </th>
-                                    <th scope="row" className="px-2 py-1 font-medium text-gray-900 whitespace-nowrap">
-                                        {dish1.people}
-                                    </th>
-                                    <td className="px-2 py-1 space-x-2">
-                                    {dish1.date.split('T')[0]}
-                                    </td>
-                                    <td className="px-2 py-1 space-x-2">
-                                        {dish1.start_time}
-                                    </td>
-                                    <td className="px-2 py-1 space-x-2">
-                                        {dish1.end_time}
-                                    </td>
-                                </tr>
-                            ))}
-                            {orders.length === 0 && (
+{/* table start */}
+<div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-10">
+                        <table className="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead className="text-xs uppercase bg-secondary text-white">
                                 <tr className='text-center'>
-                                    <td colSpan='8'>
-                                        <h2 className='text-lg font-medium text-secondary'>Order list is empty</h2>
-                                    </td>
+                                    <th scope="col" className="text-center px-1 py-3">No.</th>
+                                    <th scope="col" className="px-6 py-3">Name</th>
+                                    <th scope="col" className="px-2 py-3">People</th>
+                                    <th scope="col" className="px-2 py-3">Phone No</th>
+                                    <th scope="col" className="px-2 py-3">Date</th>
+                                    <th scope="col" className="px-2 py-3">Start Time</th>
+                                    <th scope="col" className="px-2 py-3">End Time</th>
+                                    <th scope="col" className="px-2 py-3">Comments</th>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {reservation.map((reservation, index) => (
+                                    <tr key={index} className="text-center bg-white border-b border-gray-200 hover:bg-gray-50">
+                                        <th scope="row" className="text-center py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {index + 1}
+                                        </th>
+                                        <th scope="row" className="px-2 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {reservation.name}
+                                        </th>
+                                        <th scope="row" className="px-2 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                            {reservation.people}
+                                        </th>
+                                        <th scope="row" className="px-2 py-1 font-medium text-gray-900 whitespace-nowrap">
+                                            {reservation.phone_no}
+                                        </th>
+                                        <td className="px-2 py-1">
+                                            {reservation.date.split('T')[0]}
+                                        </td>
+                                        <td className="px-2 py-1">
+                                            {reservation.start_time}
+                                        </td>
+                                        <td className="px-2 py-1">
+                                            {reservation.end_time}
+                                        </td>
+                                        <td className="px-2 py-1">
+                                            {reservation.comments}
+                                        </td>
+                                    </tr>
+                                ))}
+                                {reservation.length === 0 && (
+                                    <tr className='text-center'>
+                                        <td colSpan='8'>
+                                            <h2 className='text-lg font-medium text-secondary'>No Reservation yet.</h2>
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+                    {/* table end */}     
                 </Container>
         </section>
     )
