@@ -48,7 +48,7 @@ export default function Login(props) {
     return (
         <>
         <DashboardHeader title='Dashboard'/>
-        <section className='pt-25 lg:pt-10 pb-10 flex flex-col items-center'>
+        <section className='pt-25 lg:pt-0 pb-10 flex flex-col items-center'>
                 <div className='bg-[#ebf1f4] p-8 lg:pl-10 pb-10 rounded-3xl shadow-md flex flex-row md:gap-12 lg:gap-8 justify-between'>
                     <div className='flex flex-col md:gap-12 md:w-[40%]'>
                         <div className='hidden md:block text-center w-28'>

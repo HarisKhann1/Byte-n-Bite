@@ -1,6 +1,7 @@
 import React from 'react'
 import Logo from '../../assets/images/logo.png'
 import Container from '../Container'
+import { Link } from 'react-router-dom'
 
 export default function Footer(props) {
     
@@ -31,6 +32,11 @@ export default function Footer(props) {
                             <h3 className='text-gray-200 underline font-semibold'>Phone:</h3>
                             <a className='text-gray-300 text-sm' href="tel:03001212121">0300-1212121</a>
                         </div>
+                            <Link 
+                                to='/dashboard/login' 
+                                        className='font-medium block py-2 text-white'>
+                                        Dashboard
+                            </Link>
                     </div>
                 </div>
                     <p className='text-primary md:text-start mt-6 text-center'>© 2025 ByteNbite. All Rights Reserved.</p>
