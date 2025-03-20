@@ -96,7 +96,7 @@ export default function AddDishes(props) {
                         <label className='block text-secondary font-medium text-lg mb-1'>Image:</label>
                         <Input 
                             {...register('image', { required: "Upload an image" })}
-                            className='w-[16rem] sm:w-lg md:w-2xl cursor-pointer'  
+                            className='w-[15rem] sm:w-lg md:w-2xl cursor-pointer'  
                             type='file' 
                             placeholder='Upload Image' 
                         />
@@ -108,7 +108,7 @@ export default function AddDishes(props) {
                             {...register('description', { required: "Enter description" })}
                             name="description" 
                             id="description" 
-                            className='w-[16rem] sm:w-lg md:w-2xl outline-none rounded border focus:border-2 focus:border-secondary'
+                            className='w-[15rem] sm:w-lg md:w-2xl outline-none rounded border focus:border-2 focus:border-secondary'
                         />
                         {errors.description && <span className='text-red-500'>{errors.description.message}</span>}
                     </div>

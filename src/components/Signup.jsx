@@ -87,7 +87,7 @@ export default function Signup(props) {
                                     )}
                                     label='Full Name' 
                                     type='text' 
-                                    className={`min-w-64 md:min-w-72 ${redBorderONError(errors.fullname)}`} placeholder='Enter your full name' 
+                                    className={`min-w-64 md:min-w-72 pr-14 ${redBorderONError(errors.fullname)}`} placeholder='Enter your full name' 
                                 />
                                 {errors.fullname && <p className="text-red-500 text-sm -mt-4">{errors.fullname.message}</p>}
                                 
@@ -103,7 +103,7 @@ export default function Signup(props) {
                                     )}  
                                     label='Email' 
                                     type='text' 
-                                    className={`min-w-64 md:min-w-72 ${redBorderONError(errors.email)}`} 
+                                    className={`min-w-64 md:min-w-72 pr-14 ${redBorderONError(errors.email)}`} 
                                     placeholder='Enter your email'
                                 />
                                 {errors.email && <p className="text-red-500 text-sm -mt-4">{errors.email.message}</p>}

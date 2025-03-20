@@ -69,7 +69,7 @@ export default function Login(props) {
                                     )}
                                     label='Email' 
                                     type='text' 
-                                    className={`min-w-64 md:min-w-72 ${redBorderONError(errors.email)}`} 
+                                    className={`min-w-64 md:min-w-72 pr-14 ${redBorderONError(errors.email)}`} 
                                     placeholder='Enter your email' 
                                 />
                                 {errors.email && <p className="text-red-500 text-sm -mt-4">{errors.email.message}</p>}    
