@@ -93,9 +93,10 @@ export default function AddDishes(props) {
                 </div>
                 <div className='flex flex-col gap-3'>
                     <div className='flex flex-col'>
+                        <label className='block text-secondary font-medium text-lg mb-1'>Image:</label>
                         <Input 
                             {...register('image', { required: "Upload an image" })}
-                            className='w-[12.4rem] sm:w-lg md:w-2xl cursor-pointer'  
+                            className='w-[14rem] sm:w-lg md:w-2xl cursor-pointer'  
                             type='file' 
                             placeholder='Upload Image' 
                         />
