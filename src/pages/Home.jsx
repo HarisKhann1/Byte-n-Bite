@@ -1,5 +1,5 @@
 import React from 'react'
-import { HeroSection, Category, FreinedsSection, FAQs, Loader } from '../components/index'
+import { HeroSection, Category, FreinedsSection, FAQs } from '../components/index'
 
 export default function Home(props) {
     

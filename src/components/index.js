@@ -10,7 +10,6 @@ import Signup from "./Signup.jsx";
 import Input from "./Input.jsx";
 import Login from "./Login.jsx";
 import ReservationForm from "./ReservationForm.jsx";
-import Loader from "./loader.jsx";
 import Category from "./Category.jsx";
 // Dashboard components
 import Sidebar from "./dashboard/Sidebar.jsx";
@@ -32,7 +31,6 @@ export {
     Login,
     ReservationForm,
     Category,
-    Loader,
     Sidebar,
     DashboardHeader,
     AddDishes,
