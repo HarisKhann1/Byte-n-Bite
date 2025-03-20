@@ -1,9 +1,13 @@
 // src/components/Sidebar.jsx
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { adminLogout } from '../../store/adminAuthSlice'
 import auth from '../../appwrite/auth'
+import { useSelector } from 'react-redux';
+
 const Sidebar = () => {
+        const adminAuth = useSelector((state) => state.adminAuth.status);
+
         const dispatch = useDispatch();
         const navItem = [
                 { title: 'Add Dish', link: '/dashboard/add-dish' },
@@ -30,11 +34,19 @@ return (
                         </NavLink>
                         ))}
                     </nav>
+                    {adminAuth ? (
                     <button 
                             onClick={handleLogout}
                             className="mt-8 py-2 px-4 bg-red-600 rounded text-white w-full hover:bg-red-700">
                                     Logout
                     </button>
+                        ) : (
+                                <Link 
+                                to='/dashboard/login' 
+                                        className='font-medium block py-2 px-4 mt-5 bg-primary text-white rounded hover:bg-primary-dark'>
+                                        Login
+                                </Link>
+                        )}
             </div>
     );
 };
