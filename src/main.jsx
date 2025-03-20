@@ -24,6 +24,7 @@ import { Signup, Login} from './components/index.js';
 import DashboardLogin from './components/dashboard/Login.jsx'
 import ShowReservation from './components/dashboard/ShowReservation.jsx'
 import Orders from './components/dashboard/Orders.jsx'
+import WeekMenu from './components/WeekMenu.jsx'
 
   const router = createBrowserRouter([
     {
@@ -35,8 +36,8 @@ import Orders from './components/dashboard/Orders.jsx'
           element: <Home />
         },
         {
-          path: '/menu/:categoryName',
-          element: <Menu />
+          path: '/category/:categoryName',
+          element: <WeekMenu />
         },
         {
           path: '/reservation',
@@ -53,6 +54,10 @@ import Orders from './components/dashboard/Orders.jsx'
         {
           path: '/signup',
           element: <Signup />
+        },
+        {
+          path: '/menu',
+          element: <Menu />
         },
       ]
     },

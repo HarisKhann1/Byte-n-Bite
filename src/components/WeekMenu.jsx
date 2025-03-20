@@ -46,7 +46,7 @@ export default function WeekMenu(props) {
 
     return (
         <Container>
-            <section>
+            <section className='my-20'>
                 <div className='py-8 flex flex-col gap-8'>
                     <div className='flex justify-between items-center flex-wrap gap-2'>
                         <h2 className='text-secondary text-[1.2rem] font-medium md:font-semibold md:text-3xl lg:text-4xl'>{categoryName} Menu</h2>
