@@ -47,10 +47,12 @@ export default function AddCategory(props) {
                             placeholder='Dish Name'
                         />
                         {errors.name && <span className='-mt-4 text-red-500'>{errors.name.message}</span>}
+                        
+                        <label className='block text-secondary font-medium text-lg mb-1'>Image:</label>
                         <div className='flex flex-col'>
                              <Input 
                                 {...register('image', { required: "Upload an image" })}
-                                className='w-50 sm:w-72 cursor-pointer'  
+                                className='w-60 sm:w-72 cursor-pointer'  
                                 type='file' 
                                 placeholder='Upload Image' 
                             />
