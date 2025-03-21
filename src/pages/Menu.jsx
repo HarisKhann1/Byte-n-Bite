@@ -2,9 +2,9 @@ import React, {useEffect, useState} from 'react'
 import { Container } from '../components';
 import categoryService from '../appwrite/addCategory';
 import DishByCategory from '../components/WeekMenu'
+import SearchDish from '../components/SearchDish';
 
 export default function Menu(props) {
-    const [menu, setMenu] = useState([]);
     const [loading, setLoading] = useState(false);
     const [category, setCategory] = useState([]);
 
@@ -22,9 +22,14 @@ export default function Menu(props) {
         fetchMenu();
     }, []);
 
+
     return (
-        <div className='my-16'>
+        <div className='my-20'>
             <Container>
+                <div className='flex justify-end mb-4'>
+                    <SearchDish />
+                </div>
+
                 {
                     loading ? <h1>Loading...</h1> : 
                     category.map((item) => {

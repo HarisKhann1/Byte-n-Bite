@@ -47,7 +47,7 @@ export default function WeekMenu({ category }) {
 
     return (
         <Container>
-            <section className={`${category ? 'pt-5' : 'my-20'}`}>
+            <section className={`${category ? '' : 'my-20'}`}>
                 <div className='py-8 flex flex-col gap-8'>
                     <div className='flex justify-between items-center flex-wrap gap-2'>
                         <h2 className='text-secondary text-[1.2rem] font-medium md:font-semibold md:text-3xl lg:text-4xl'>{categoryName ? categoryName : category} Menu</h2>
