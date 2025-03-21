@@ -9,7 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { addToCart } from '../store/addToCartSlice'
 import { toast } from 'sonner';
 
-export default function WeekMenu(props) {
+export default function WeekMenu({ category }) {
+    
     const { categoryName } = useParams();
     const [filteredDishes, setFilteredDishes] = useState([]);
     const authStatus = useSelector((state) => state.auth.status);
@@ -17,7 +18,7 @@ export default function WeekMenu(props) {
 
     const fetchDishesByCategory = async () => {
         try {
-            const response = await appwriteDishService.getFilterDishes(categoryName);
+            const response = await appwriteDishService.getFilterDishes(categoryName ? categoryName : category);
             if (response) {
                 const data = response.documents.map((item) => {
                     return {
@@ -46,10 +47,10 @@ export default function WeekMenu(props) {
 
     return (
         <Container>
-            <section className='my-20'>
+            <section className={`${category ? 'pt-5' : 'my-20'}`}>
                 <div className='py-8 flex flex-col gap-8'>
                     <div className='flex justify-between items-center flex-wrap gap-2'>
-                        <h2 className='text-secondary text-[1.2rem] font-medium md:font-semibold md:text-3xl lg:text-4xl'>{categoryName} Menu</h2>
+                        <h2 className='text-secondary text-[1.2rem] font-medium md:font-semibold md:text-3xl lg:text-4xl'>{categoryName ? categoryName : category} Menu</h2>
                     </div>
                     <div className='grid grid-cols-1 sm:grid-cols-2 gap-8 lg:grid-cols-4'>
                         {/* card */}
