@@ -112,9 +112,8 @@ class Dish {
     }
 
     getDishImagePreview(imageId) {
-
         try {
-            return this.bucket.getFilePreview(
+            return this.bucket.getFileView(
                 conf.appWriteDishesBucketId,
                 imageId
             );

@@ -98,16 +98,17 @@ class appwriteCategory {
         }
     }
 
-    getDishImagePreview(imageId) {
+    getCategoryImage(imageId) {
         try {
-            return this.bucket.getFilePreview(
+            return this.bucket.getFileView(
                 conf.appWriteCategoryBucketId,
                 imageId
             );
-        } catch (error) {   
+        } catch (error) {
             return null;
         }
-    };
+    }
+
 }
 
 const addCategory = new appwriteCategory();
