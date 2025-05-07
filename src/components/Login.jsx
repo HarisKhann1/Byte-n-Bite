@@ -96,7 +96,7 @@ export default function Login(props) {
                                 <div>
                                     <Button 
                                         type='submit'
-                                        className='min-w-64 md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out'>
+                                        className='min-w-[17rem] md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out'>
                                         Login
                                     </Button>
                                 </div>
