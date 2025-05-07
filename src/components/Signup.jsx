@@ -163,7 +163,7 @@ export default function Signup(props) {
                                     <Button 
                                         disabled={creatingAccount} 
                                         type="submit" 
-                                        className={`min-w-64 md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out ${creatingAccount ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                                        className={`min-w-72 md:min-w-72 bg-primary cursor-pointer font-medium text-white py-2 rounded hover:bg-amber-600 transition duration-300 ease-in-out ${creatingAccount ? 'opacity-50 cursor-not-allowed' : ''}`}>
                                         {creatingAccount ? 'Creating Account...' : 'Signup'}
                                     </Button>
                                 </div>
